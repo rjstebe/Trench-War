@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://bc6asikqwrs3x"]
+
+[ext_resource type="Script" path="res://scripts/units/soldier.gd" id="1_icff7"]
+[ext_resource type="Texture2D" uid="uid://dxa0estw0nj78" path="res://sprites/rifleman.png" id="1_tlim7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ut16a"]
+radius = 4.0
+
+[node name="Rifleman" type="CharacterBody2D"]
+input_pickable = true
+motion_mode = 1
+script = ExtResource("1_icff7")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ut16a")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("1_tlim7")
+
+[node name="NavigationAgent" type="NavigationAgent2D" parent="."]
+path_desired_distance = 2.0
+target_desired_distance = 2.0
+path_max_distance = 200.0
+avoidance_enabled = true
+radius = 4.8
+neighbor_distance = 1000.0
+max_speed = 40.0
+avoidance_priority = 0.0
+debug_enabled = true
+
+[node name="SelectionMarker" type="Line2D" parent="."]
+visible = false
+scale = Vector2(2, 2)
+points = PackedVector2Array(3, 0, 2.772, 1.148, 2.121, 2.121, 1.148, 2.772, 0, 3, -1.148, 2.772, -2.121, 2.121, -2.772, 1.148, -3, 0, -2.772, -1.148, -2.121, -2.121, -1.148, -2.772, 0, -3, 1.148, -2.772, 2.121, -2.121, 2.772, -1.148)
+closed = true
+width = 1.0
+default_color = Color(0, 0.74902, 0, 0.498039)
+
+[connection signal="velocity_computed" from="NavigationAgent" to="." method="_on_safe_velocity_computed"]
