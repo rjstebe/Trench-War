@@ -53,7 +53,6 @@ func _erase_half_trench_segment(layer_index:int, start_position:Vector2i, trench
 			neighbors_to_keep.append(neighbor)
 	erase_cell(layer_index, start_position)
 	if not trench_neighbors_lookup_table.has(neighbors_to_keep):
-		erase_cell(layer_index, start_position)
 		return
 	var atlas_coord_and_alt_id = trench_neighbors_lookup_table[neighbors_to_keep]
 	var atlas_coord = atlas_coord_and_alt_id[0]
