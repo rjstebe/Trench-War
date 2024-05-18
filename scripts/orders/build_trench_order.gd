@@ -8,7 +8,6 @@ func _ready():
 	super._ready()
 	#Check if opposite order exists,
 	opposite_order = OrderManager.get_build_trench_order_by_location(hex_position+trench_direction, -trench_direction)
-	print("opposite_order: ", opposite_order)
 	#if so set opposite_order for both accordingly, and synchronize build_times
 	if opposite_order != null:
 		opposite_order.opposite_order = self
@@ -18,7 +17,6 @@ func progress_build(progress:float):
 	var orders_to_remove = []
 	#If opposite order exists, progress the build on that as well
 	if opposite_order != null:
-		print("progressing opposite_order")
 		orders_to_remove.append_array(opposite_order._progess_build_one_side(progress))
 	orders_to_remove.append_array(_progess_build_one_side(progress))
 	if orders_to_remove.size() > 0:
