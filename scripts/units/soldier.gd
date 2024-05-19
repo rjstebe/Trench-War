@@ -12,6 +12,7 @@ signal became_available(soldier:Soldier)
 enum State {IDLE, PATHING}
 var current_state = State.IDLE
 @export var current_order:Order = null
+@export var current_rally_point:RallyPoint = null
 
 func _ready():
 	input_event.connect(InputManager._on_input_event.bind(self))
@@ -25,7 +26,7 @@ func _physics_process(delta):
 			var next_waypoint: Vector2 = nav_agent.get_next_path_position()
 			nav_agent.set_velocity(global_position.direction_to(next_waypoint) * speed)
 		State.IDLE:
-			if current_order is BuildOrder and current_order.overlaps_body(self):
+			if current_order is BuildOrder and current_rally_point.overlaps_body(self):
 				current_order.progress_build(build_speed*delta)
 			nav_agent.set_velocity(Vector2.ZERO)
 		_:

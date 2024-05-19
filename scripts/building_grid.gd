@@ -41,9 +41,9 @@ func _get_all_trench_atlas_coords_and_alt_ids():
 			coords_and_alt_ids.append([tile, j])
 	return coords_and_alt_ids
 
-func erase_trench_segment(layer_index:int, start_position:Vector2i, trench_direction:Vector2i):
-	_erase_half_trench_segment(layer_index, start_position, get_neighbor_from_direction(trench_direction))
-	_erase_half_trench_segment(layer_index, start_position+trench_direction, get_neighbor_from_direction(-trench_direction))
+func erase_trench_segment(layer_index:int, start_position:Vector2i, end_position:Vector2i):
+	_erase_half_trench_segment(layer_index, start_position, get_neighbor_from_direction(end_position-start_position))
+	_erase_half_trench_segment(layer_index, end_position, get_neighbor_from_direction(start_position-end_position))
 
 func _erase_half_trench_segment(layer_index:int, start_position:Vector2i, trench_neighbor:TileSet.CellNeighbor):
 	var hex_data = get_cell_tile_data(layer_index, start_position)
@@ -108,6 +108,20 @@ func get_direction_from_neighbor(neighbor:TileSet.CellNeighbor):
 			return Vector2i(1,-1)
 		_:
 			return null
+
+# Get all adjacent trenches to the one defined by the two given hex positions
+func get_adjacent_trench_positions(hex_position_a, hex_position_b):
+	var construction_hex_a = get_cell_tile_data(CONSTRUCTION_LAYER_INDEX, hex_position_a)
+	var construction_hex_b = get_cell_tile_data(CONSTRUCTION_LAYER_INDEX, hex_position_b)
+	var neighbor_to_hex_a = get_neighbor_from_direction(hex_position_a - hex_position_b)
+	var neighbor_to_hex_b = get_neighbor_from_direction(hex_position_b - hex_position_a)
+	var adjacent_trench_positions = []
+	for neighbor in get_neighbor_list():
+		if neighbor != neighbor_to_hex_a and construction_hex_b.get_terrain_peering_bit(neighbor) == TRENCH_TERRAIN_INDEX:
+			adjacent_trench_positions.append([hex_position_b, hex_position_b+get_direction_from_neighbor(neighbor)])
+		if neighbor != neighbor_to_hex_b and construction_hex_a.get_terrain_peering_bit(neighbor) == TRENCH_TERRAIN_INDEX:
+			adjacent_trench_positions.append([hex_position_a, hex_position_a+get_direction_from_neighbor(neighbor)])
+	return adjacent_trench_positions
 
 func hex_line(start_cell:Vector2i, end_cell:Vector2i) -> Array[Vector2i]:
 	var start_position:Vector2 = map_to_local(start_cell)

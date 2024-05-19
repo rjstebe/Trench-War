@@ -3,11 +3,14 @@ class_name BuildOrder
 
 @onready var building_grid = InputManager.get_building_grid()
 
-@export var hex_position : Vector2i = Vector2i.ZERO
+@export var hex_positions : Array = []
 @export var build_time = 10
 
+@export var rally_points : Array[RallyPoint] = []
+
 func _ready():
-	position = building_grid.map_to_local(hex_position)
+	for i in range(0, rally_points.size()):
+		rally_points[i].position = building_grid.map_to_local(hex_positions[i])
 
 func progress_build(progress:float):
 	build_time -= progress

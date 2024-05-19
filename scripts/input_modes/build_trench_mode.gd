@@ -52,14 +52,14 @@ func _set_construction_layer(hex_line:Array[Vector2i]):
 				end_index = i
 				# Also create construction order for end of line if applicable
 				if current_real_hex != null:
-					build_trench_order_positions.append([hex_line[i], hex_line[i-1]-hex_line[i]])
+					build_trench_order_positions.append([hex_line[i], hex_line[i-1]])
 		# if not counting a line start a new one when no connection to next hex
 		if i + 1 < hex_line.size() and (current_real_hex == null or current_real_hex.get_terrain_peering_bit(building_grid.get_neighbor_from_direction(hex_line[i+1]-hex_line[i])) != building_grid.TRENCH_TERRAIN_INDEX):
 			if end_index <= start_index:
 				start_index = i
 				# Also create construction order for beginning of line if applicable
 				if current_real_hex != null:
-					build_trench_order_positions.append([hex_line[i], hex_line[i+1]-hex_line[i]])
+					build_trench_order_positions.append([hex_line[i], hex_line[i+1]])
 			end_index = i+1
 	
 	for line in lines:
