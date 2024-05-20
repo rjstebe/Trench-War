@@ -17,9 +17,8 @@ func _unhandled_input(event:InputEvent):
 		var mouse_position = null
 		for node in InputManager.selection:
 			mouse_position = node.get_global_mouse_position()
-			node.nav_agent.target_position = mouse_position
-			node.set_state(node.State.PATHING)
-			node.current_order = null
+			#node.set_rally_point()
+			print("Manual move orders are not currently implemented")
 		print("Ordered selection to move to position: ", mouse_position)
 
 func _on_input_event(event:InputEvent, object:Soldier):

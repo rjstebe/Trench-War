@@ -6,10 +6,7 @@ class_name RallyPoint
 
 func assign_soldier(soldier:Soldier):
 	if assigned_soldiers.size() >= soldier_limit:
-		print("Can't assign soldier to order, no more space available in order")
+		print("Can't assign soldier to rally point, no more space available in rally point")
 	else:
 		assigned_soldiers.append(soldier)
-		soldier.current_order = get_parent()
-		soldier.current_rally_point = self
-		soldier.nav_agent.target_position = position
-		soldier.set_state(Soldier.State.PATHING)
+		soldier.set_rally_point(self)

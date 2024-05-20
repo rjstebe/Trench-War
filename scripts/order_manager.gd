@@ -22,13 +22,13 @@ func create_build_trench_orders(trench_positions:Array):
 
 func remove_build_orders(build_orders_to_remove:Array):
 	for build_order in build_orders_to_remove:
-		#Clear order and rally point for all assigned soldiers
+		#Remove rally point from build_order_rally_points
+		#and clear rally point for all assigned soldiers
 		for rally_point in build_order.rally_points:
 			build_order_rally_points[rally_point.assigned_soldiers.size()].erase(rally_point)
 			for soldier in rally_point.assigned_soldiers:
-				soldier.current_order = null
-				soldier.current_rally_point = null
-				soldier.set_state(Soldier.State.IDLE)
+				soldier.set_rally_point(null)
+				idle_soldiers[soldier] = null
 		build_order.queue_free()
 		#Clear order from trench order location lookup table if applicable
 		if build_order is BuildTrenchOrder:
@@ -44,9 +44,10 @@ func update_build_order_assignments():
 	var remaining_soldiers = idle_soldiers.keys().size()
 	for i in range(0,2):
 		for rally_point in build_order_rally_points[i].keys():
-			if remaining_soldiers <= 0:
+			if idle_soldiers.keys().size() <= 0:
 				return
-			rally_point.assign_soldier(idle_soldiers.keys()[0])
+			var chosen_soldier = idle_soldiers.keys()[0]
+			rally_point.assign_soldier(chosen_soldier)
+			idle_soldiers.erase(chosen_soldier)
 			build_order_rally_points[i].erase(rally_point)
 			build_order_rally_points[i+1][rally_point] = null
-			remaining_soldiers -= 1
