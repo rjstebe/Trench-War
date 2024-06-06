@@ -4,11 +4,9 @@ extends Node
 
 @export var selection = {}
 
-func get_building_grid():
-	return $"../Battle/BuildingGrid"
-
-func get_battle():
-	return $"../Battle"
+# Global References
+@onready var building_grid = $"../Battle/BuildingGrid"
+@onready var player_manager = $"../Battle/PlayerManager"
 
 func _unhandled_key_input(event:InputEvent):
 	if input_mode != null:

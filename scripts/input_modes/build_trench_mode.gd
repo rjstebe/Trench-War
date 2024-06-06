@@ -65,4 +65,5 @@ func _set_construction_layer(hex_line:Array[Vector2i]):
 	for line in lines:
 		building_grid.set_cells_terrain_path(building_grid.CONSTRUCTION_LAYER_INDEX, line, 0, building_grid.TRENCH_TERRAIN_INDEX)
 	
-	OrderManager.create_build_trench_orders(build_trench_order_positions)
+	for trench_position in build_trench_order_positions:
+		InputManager.player_manager.create_build_trench_order(trench_position)

@@ -4,9 +4,13 @@ class_name RallyPoint
 @export var assigned_soldiers:Array = []
 @export var soldier_limit = 2
 
-func assign_soldier(soldier:Soldier):
-	if assigned_soldiers.size() >= soldier_limit:
-		print("Can't assign soldier to rally point, no more space available in rally point")
-	else:
-		assigned_soldiers.append(soldier)
-		soldier.set_rally_point(self)
+signal rally_point_removed
+
+func is_assignable():
+	return assigned_soldiers.size() < soldier_limit
+
+func _remove_rally_point():
+	for soldier in assigned_soldiers:
+		soldier.set_rally_point(null)
+	rally_point_removed.emit(self)
+	queue_free()

@@ -10,6 +10,8 @@ var trench_neighbors_lookup_table = {}
 const TRENCH_TERRAIN_INDEX = 0
 const TRENCH_TILE_SOURCE_INDEX = 0
 
+var trench_ownership_lookup_table = {}
+
 # Use _tile_data_runtime_update when updating tilemap layers that should have collisions disabled
 func _use_tile_data_runtime_update(layer:int, _coords:Vector2i) -> bool:
 	return layer in NO_COLLIDE_LAYERS
@@ -20,6 +22,7 @@ func _tile_data_runtime_update(_layer:int, _coords:Vector2i, tile_data:TileData)
 
 func _ready():
 	_set_up_trench_neighbors_lookup_table()
+	_update_trench_ownership()
 
 func _set_up_trench_neighbors_lookup_table():
 	for atlas_coord_and_alt_id in _get_all_trench_atlas_coords_and_alt_ids():
@@ -31,6 +34,9 @@ func _set_up_trench_neighbors_lookup_table():
 			if atlas_tile_data.get_terrain_peering_bit(neighbor) == TRENCH_TERRAIN_INDEX:
 				neighbors.append(neighbor)
 		trench_neighbors_lookup_table[neighbors] = atlas_coord_and_alt_id
+
+func _update_trench_ownership():
+	pass
 
 func _get_all_trench_atlas_coords_and_alt_ids():
 	var coords_and_alt_ids = []

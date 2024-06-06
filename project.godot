@@ -16,7 +16,6 @@ config/features=PackedStringArray("4.2", "GL Compatibility")
 
 [autoload]
 
-OrderManager="*res://scripts/order_manager.gd"
 InputManager="*res://scripts/input_manager.gd"
 
 [filesystem]
