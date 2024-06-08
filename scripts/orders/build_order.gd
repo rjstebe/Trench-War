@@ -17,10 +17,10 @@ func _ready():
 func progress_build(progress:float):
 	build_time -= progress
 	if build_time <= 0:
-		#Remove order
-		_remove_order()
 		#Call subclass' implementation of build
 		_build()
+		#Remove order
+		_remove_order()
 
 func _remove_order():
 	for rally_point in rally_points:

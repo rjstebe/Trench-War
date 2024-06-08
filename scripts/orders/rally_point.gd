@@ -10,7 +10,7 @@ func is_assignable():
 	return assigned_soldiers.size() < soldier_limit
 
 func _remove_rally_point():
-	for soldier in assigned_soldiers:
-		soldier.set_rally_point(null)
+	while not assigned_soldiers.is_empty():
+		assigned_soldiers[0].set_rally_point(null)
 	rally_point_removed.emit(self)
 	queue_free()

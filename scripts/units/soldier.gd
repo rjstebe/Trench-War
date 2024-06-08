@@ -50,6 +50,7 @@ func _set_behavior(new_behavior):
 			nav_agent.avoidance_priority = 0
 		Behavior.RALLYING:
 			nav_agent.avoidance_priority = 1
+			nav_agent.target_position = current_rally_point.position
 		Behavior.EXECUTING:
 			nav_agent.avoidance_priority = 0
 	current_behavior = new_behavior
@@ -67,9 +68,8 @@ func set_rally_point(new_rally_point=null):
 		if current_rally_point != null:
 			current_rally_point.assigned_soldiers.erase(self)
 		new_rally_point.assigned_soldiers.append(self)
-		_set_behavior(Behavior.RALLYING)
-		nav_agent.target_position = new_rally_point.position
 		soldier_assigned.emit(self)
 		current_rally_point = new_rally_point
+		_set_behavior(Behavior.RALLYING)
 	else:
 		print("Soldier could not be assigned to rally point, either it is already assigned, or the rally point is at its capacity for assigned soldiers")
