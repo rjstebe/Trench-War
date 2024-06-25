@@ -14,12 +14,17 @@ enum Behavior {IDLE, RALLYING, EXECUTING, FIGHTING}
 var current_behavior = Behavior.IDLE
 @export var current_rally_point:RallyPoint = null
 
+@export var side:PlayerManager.Side
+
 signal soldier_unassigned
 signal soldier_assigned
+signal soldier_entered_hex
+signal soldier_left_hex
 
 func _ready():
 	input_event.connect(InputManager._on_input_event.bind(self))
 	soldier_unassigned.emit(self)
+	soldier_entered_hex.emit(self, InputManager.building_grid.local_to_map(position))
 
 func _physics_process(delta):
 	match(current_behavior):
@@ -42,7 +47,16 @@ func _physics_process(delta):
 
 func _on_safe_velocity_computed(safe_velocity:Vector2):
 	velocity = safe_velocity
+	var previous_hex = InputManager.building_grid.local_to_map(position)
 	move_and_slide()
+	var new_hex = InputManager.building_grid.local_to_map(position)
+	if new_hex != previous_hex:
+		soldier_left_hex.emit(self, previous_hex)
+		soldier_entered_hex.emit(self, new_hex)
+
+func _remove_soldier():
+	set_rally_point(null)
+	soldier_left_hex.emit(self, InputManager.building_grid.local_to_map(position))
 
 func _set_behavior(new_behavior):
 	match(new_behavior):

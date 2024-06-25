@@ -1,5 +1,7 @@
 extends TileMap
 
+var debug_label_scene = preload("res://scenes/debug/debug_label.tscn")
+
 const PLANNING_LAYER_INDEX = 2
 const CONSTRUCTION_LAYER_INDEX = 1
 const REAL_LAYER_INDEX = 0
@@ -9,6 +11,11 @@ var trench_neighbors_lookup_table = {}
 
 const TRENCH_TERRAIN_INDEX = 0
 const TRENCH_TILE_SOURCE_INDEX = 0
+
+var player_soldier_count = {}
+var enemy_soldier_count = {}
+var player_count_debug_labels = {}
+var enemy_count_debug_labels = {}
 
 # Use _tile_data_runtime_update when updating tilemap layers that should have collisions disabled
 func _use_tile_data_runtime_update(layer:int, _coords:Vector2i) -> bool:
@@ -20,6 +27,37 @@ func _tile_data_runtime_update(_layer:int, _coords:Vector2i, tile_data:TileData)
 
 func _ready():
 	_set_up_trench_neighbors_lookup_table()
+
+func _on_soldier_enter_hex(soldier:Soldier, hex_position:Vector2i):
+	if not player_soldier_count.has(hex_position):
+		player_soldier_count[hex_position] = 0
+		enemy_soldier_count[hex_position] = 0
+		var player_label = debug_label_scene.instantiate()
+		var enemy_label = debug_label_scene.instantiate()
+		add_child(player_label)
+		add_child(enemy_label)
+		player_label.position = map_to_local(hex_position)+Vector2(0, 10)
+		enemy_label.position = map_to_local(hex_position)+Vector2(0, -10)
+		player_label.get_child(0).set("theme_override_colors/font_color",Color.BLUE)
+		player_label.get_child(0).text = "0"
+		enemy_label.get_child(0).set("theme_override_colors/font_color",Color.RED)
+		enemy_label.get_child(0).text = "0"
+		player_count_debug_labels[hex_position] = player_label
+		enemy_count_debug_labels[hex_position] = enemy_label
+	if soldier.side == PlayerManager.Side.PLAYER:
+		player_soldier_count[hex_position] += 1
+		player_count_debug_labels[hex_position].get_child(0).text = str(player_soldier_count[hex_position])
+	elif soldier.side == PlayerManager.Side.ENEMY:
+		enemy_soldier_count[hex_position] += 1
+		enemy_count_debug_labels[hex_position].get_child(0).text = str(enemy_soldier_count[hex_position])
+
+func _on_soldier_leave_hex(soldier:Soldier, hex_position:Vector2i):
+	if soldier.side == PlayerManager.Side.PLAYER:
+		player_soldier_count[hex_position] -= 1
+		player_count_debug_labels[hex_position].get_child(0).text = str(player_soldier_count[hex_position])
+	elif soldier.side == PlayerManager.Side.ENEMY:
+		enemy_soldier_count[hex_position] -= 1
+		enemy_count_debug_labels[hex_position].get_child(0).text = str(enemy_soldier_count[hex_position])
 
 func _set_up_trench_neighbors_lookup_table():
 	for atlas_coord_and_alt_id in _get_all_trench_atlas_coords_and_alt_ids():
