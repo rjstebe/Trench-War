@@ -16,6 +16,12 @@ var player_soldier_count = {}
 var enemy_soldier_count = {}
 var player_count_debug_labels = {}
 var enemy_count_debug_labels = {}
+var player_safe_hexes = []
+var enemy_safe_hexes = []
+var player_vision_count = {}
+var enemy_vision_count = {}
+var player_vision_debug_labels = {}
+var enemy_vision_debug_labels = {}
 
 # Use _tile_data_runtime_update when updating tilemap layers that should have collisions disabled
 func _use_tile_data_runtime_update(layer:int, _coords:Vector2i) -> bool:
@@ -29,6 +35,12 @@ func _ready():
 	_set_up_trench_neighbors_lookup_table()
 
 func _on_soldier_enter_hex(soldier:Soldier, hex_position:Vector2i):
+	_modify_soldier_count(hex_position, soldier.side, 1)
+
+func _on_soldier_leave_hex(soldier:Soldier, hex_position:Vector2i):
+	_modify_soldier_count(hex_position, soldier.side, -1)
+
+func _modify_soldier_count(hex_position:Vector2i, side:PlayerManager.Side, change:int):
 	if not player_soldier_count.has(hex_position):
 		player_soldier_count[hex_position] = 0
 		enemy_soldier_count[hex_position] = 0
@@ -36,28 +48,48 @@ func _on_soldier_enter_hex(soldier:Soldier, hex_position:Vector2i):
 		var enemy_label = debug_label_scene.instantiate()
 		add_child(player_label)
 		add_child(enemy_label)
-		player_label.position = map_to_local(hex_position)+Vector2(0, 10)
-		enemy_label.position = map_to_local(hex_position)+Vector2(0, -10)
+		player_label.position = map_to_local(hex_position)+Vector2(-10, -10)
+		enemy_label.position = map_to_local(hex_position)+Vector2(10, -10)
 		player_label.get_child(0).set("theme_override_colors/font_color",Color.BLUE)
 		player_label.get_child(0).text = "0"
 		enemy_label.get_child(0).set("theme_override_colors/font_color",Color.RED)
 		enemy_label.get_child(0).text = "0"
 		player_count_debug_labels[hex_position] = player_label
 		enemy_count_debug_labels[hex_position] = enemy_label
-	if soldier.side == PlayerManager.Side.PLAYER:
-		player_soldier_count[hex_position] += 1
+	if side == PlayerManager.Side.PLAYER:
+		player_soldier_count[hex_position] += change
 		player_count_debug_labels[hex_position].get_child(0).text = str(player_soldier_count[hex_position])
-	elif soldier.side == PlayerManager.Side.ENEMY:
-		enemy_soldier_count[hex_position] += 1
+		for vision_position in get_trench_hexes_in_line_of_sight(hex_position):
+			_modify_vision_count(vision_position, side, change)
+	elif side == PlayerManager.Side.ENEMY:
+		enemy_soldier_count[hex_position] += change
 		enemy_count_debug_labels[hex_position].get_child(0).text = str(enemy_soldier_count[hex_position])
+		for vision_position in get_trench_hexes_in_line_of_sight(hex_position):
+			_modify_vision_count(vision_position, side, change)
 
-func _on_soldier_leave_hex(soldier:Soldier, hex_position:Vector2i):
-	if soldier.side == PlayerManager.Side.PLAYER:
-		player_soldier_count[hex_position] -= 1
-		player_count_debug_labels[hex_position].get_child(0).text = str(player_soldier_count[hex_position])
-	elif soldier.side == PlayerManager.Side.ENEMY:
-		enemy_soldier_count[hex_position] -= 1
-		enemy_count_debug_labels[hex_position].get_child(0).text = str(enemy_soldier_count[hex_position])
+func _modify_vision_count(hex_position:Vector2i, side:PlayerManager.Side, change:int):
+	if side == PlayerManager.Side.PLAYER:
+		if not player_vision_count.has(hex_position):
+			player_vision_count[hex_position] = 0
+			var player_label = debug_label_scene.instantiate()
+			add_child(player_label)
+			player_label.position = map_to_local(hex_position)+Vector2(-10, 10)
+			player_label.get_child(0).set("theme_override_colors/font_color",Color.BLUE)
+			player_label.get_child(0).text = "0"
+			player_vision_debug_labels[hex_position] = player_label
+		player_vision_count[hex_position] += change
+		player_vision_debug_labels[hex_position].get_child(0).text = str(player_vision_count[hex_position])
+	elif side == PlayerManager.Side.ENEMY:
+		if not enemy_vision_count.has(hex_position):
+			enemy_vision_count[hex_position] = 0
+			var enemy_label = debug_label_scene.instantiate()
+			add_child(enemy_label)
+			enemy_label.position = map_to_local(hex_position)+Vector2(10, 10)
+			enemy_label.get_child(0).set("theme_override_colors/font_color",Color.RED)
+			enemy_label.get_child(0).text = "0"
+			enemy_vision_debug_labels[hex_position] = enemy_label
+		enemy_vision_count[hex_position] += change
+		enemy_vision_debug_labels[hex_position].get_child(0).text = str(enemy_vision_count[hex_position])
 
 func _set_up_trench_neighbors_lookup_table():
 	for atlas_coord_and_alt_id in _get_all_trench_atlas_coords_and_alt_ids():
@@ -79,10 +111,6 @@ func _get_all_trench_atlas_coords_and_alt_ids():
 			coords_and_alt_ids.append([tile, j])
 	return coords_and_alt_ids
 
-func erase_trench_segment(layer_index:int, start_position:Vector2i, end_position:Vector2i):
-	_erase_half_trench_segment(layer_index, start_position, get_neighbor_from_direction(end_position-start_position))
-	_erase_half_trench_segment(layer_index, end_position, get_neighbor_from_direction(start_position-end_position))
-
 func _erase_half_trench_segment(layer_index:int, start_position:Vector2i, trench_neighbor:TileSet.CellNeighbor):
 	var hex_data = get_cell_tile_data(layer_index, start_position)
 	var neighbors_to_keep = []
@@ -102,6 +130,35 @@ func place_trench_by_peering_bits(layer:int, coords:Vector2i, neighbors:Array[Ti
 	var atlas_coord = atlas_coord_and_alt_id[0]
 	var alt_id = atlas_coord_and_alt_id[1]
 	set_cell(layer, coords, TRENCH_TILE_SOURCE_INDEX, atlas_coord, alt_id)
+
+func build_trench(hex_position_a, hex_position_b):
+	#Construct trench segment
+	set_cells_terrain_path(REAL_LAYER_INDEX, [hex_position_a, hex_position_b], 0, TRENCH_TERRAIN_INDEX)
+	#Remove segment in construction layer
+	_erase_half_trench_segment(CONSTRUCTION_LAYER_INDEX, hex_position_a, get_neighbor_from_direction(hex_position_b-hex_position_a))
+	_erase_half_trench_segment(CONSTRUCTION_LAYER_INDEX, hex_position_b, get_neighbor_from_direction(hex_position_a-hex_position_b))
+	#Update vision data
+	var newly_visible_trenches = _get_trench_hexes_in_line_of_sight_in_direction(hex_position_a, hex_position_b-hex_position_a)
+	newly_visible_trenches.append_array(_get_trench_hexes_in_line_of_sight_in_direction(hex_position_b, hex_position_a-hex_position_b))
+	for hex_position in newly_visible_trenches:
+		_update_vision_data_for_tile(hex_position)
+
+func _update_vision_data_for_tile(hex_position:Vector2i):
+	var running_player_vision_count = 0
+	var running_enemy_vision_count = 0
+	for visible_hex in get_trench_hexes_in_line_of_sight(hex_position):
+		if player_soldier_count.has(visible_hex):
+			running_player_vision_count += player_soldier_count[visible_hex]
+		if enemy_soldier_count.has(visible_hex):
+			running_enemy_vision_count += enemy_soldier_count[visible_hex]
+	var player_vision_count_change = running_player_vision_count
+	if player_vision_count.has(hex_position):
+		player_vision_count_change -= player_vision_count[hex_position]
+	var enemy_vision_count_change = running_enemy_vision_count
+	if enemy_vision_count.has(hex_position):
+		enemy_vision_count_change -= enemy_vision_count[hex_position]
+	_modify_vision_count(hex_position, PlayerManager.Side.PLAYER, player_vision_count_change)
+	_modify_vision_count(hex_position, PlayerManager.Side.ENEMY, enemy_vision_count_change)
 
 func get_neighbor_list():
 	return [
@@ -147,7 +204,7 @@ func get_direction_from_neighbor(neighbor:TileSet.CellNeighbor):
 		_:
 			return null
 
-# Get all adjacent trenches to the one defined by the two given hex positions
+# Get all adjacent construction trenches to the one defined by the two given hex positions
 func get_adjacent_trench_positions(hex_position_a, hex_position_b):
 	var construction_hex_a = get_cell_tile_data(CONSTRUCTION_LAYER_INDEX, hex_position_a)
 	var construction_hex_b = get_cell_tile_data(CONSTRUCTION_LAYER_INDEX, hex_position_b)
@@ -160,6 +217,25 @@ func get_adjacent_trench_positions(hex_position_a, hex_position_b):
 		if neighbor != neighbor_to_hex_b and construction_hex_a.get_terrain_peering_bit(neighbor) == TRENCH_TERRAIN_INDEX:
 			adjacent_trench_positions.append([hex_position_a, hex_position_a+get_direction_from_neighbor(neighbor)])
 	return adjacent_trench_positions
+
+#Returns all trench hexes that have a clear line of sight to the given hex position
+func get_trench_hexes_in_line_of_sight(hex_position):
+	var trench_positions_in_line_of_sight = [hex_position]
+	for neighbor in get_neighbor_list():
+		var direction = get_direction_from_neighbor(neighbor)
+		trench_positions_in_line_of_sight.append_array(_get_trench_hexes_in_line_of_sight_in_direction(hex_position, direction))
+	return trench_positions_in_line_of_sight
+
+#Does not include origin hex
+func _get_trench_hexes_in_line_of_sight_in_direction(hex_position:Vector2i, direction:Vector2i):
+	var trench_positions = []
+	var current_hex_position = hex_position
+	var current_hex = get_cell_tile_data(REAL_LAYER_INDEX, hex_position)
+	while(current_hex != null and current_hex.get_terrain_peering_bit(get_neighbor_from_direction(direction)) == TRENCH_TERRAIN_INDEX):
+		current_hex_position += direction
+		trench_positions.append(current_hex_position)
+		current_hex = get_cell_tile_data(REAL_LAYER_INDEX, current_hex_position)
+	return trench_positions
 
 func hex_line(start_cell:Vector2i, end_cell:Vector2i) -> Array[Vector2i]:
 	var start_position:Vector2 = map_to_local(start_cell)

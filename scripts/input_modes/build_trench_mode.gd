@@ -14,7 +14,6 @@ func _unhandled_key_input(event:InputEvent):
 	if event.is_action_released("ui_cancel"):
 		building_grid.clear_layer(building_grid.PLANNING_LAYER_INDEX)
 		InputManager.input_mode = DefaultInputMode.new()
-		print("canceling action")
 		return
 
 func _unhandled_input(event:InputEvent):
@@ -29,11 +28,9 @@ func _unhandled_input(event:InputEvent):
 			building_grid.clear_layer(building_grid.PLANNING_LAYER_INDEX)
 			_set_construction_layer(building_grid.hex_line(start_hex,mouse_hex))
 			InputManager.input_mode = DefaultInputMode.new()
-			print("Finished action")
 			return
 		start_hex = mouse_hex
 		help_text = "Click again to set endpoint, Esc to cancel"
-		print("Started Trench")
 		return
 
 # Add hex line to construction layer, but not including connections that already exist
