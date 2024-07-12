@@ -1287,7 +1287,7 @@ sources/0 = SubResource("TileSetAtlasSource_s0gao")
 tile_set = SubResource("TileSet_f86ca")
 format = 2
 layer_0/name = "Trenches"
-layer_0/tile_data = PackedInt32Array(2031600, 0, 1, 2031601, 196608, 65536, 2031602, 131072, 3, 2031603, 131072, 3, 2031605, 131072, 3, 2031606, 262144, 65536, 2031607, 131072, 3, 2031608, 131072, 3, 2031609, 196608, 0, 2031610, 131072, 3, 2031611, 131072, 3, 2031612, 262144, 0, 2031613, 131072, 3, 2031614, 262144, 65536, 2031615, 131072, 3, 1966080, 131072, 3, 1966081, 196608, 65536, 1966082, 131072, 3, 1966083, 131072, 3, 1966084, 262144, 0, 1966085, 131072, 3, 1966086, 262144, 65536, 1966087, 131072, 3, 1966088, 131072, 3, 1966089, 196608, 0, 1966090, 0, 65537, 1834993, 0, 1, 1834994, 131072, 3, 1769484, 0, 65537, 1769483, 131072, 3, 1834995, 131072, 3, 1769482, 131072, 3, 1835001, 65536, 65536, 1835002, 131072, 3, 1835003, 131072, 3, 1966071, 131072, 4, 1900536, 131072, 4, 1900548, 131072, 65540, 1835012, 131072, 65540, 1769476, 65536, 0, 1769475, 131072, 3, 1769474, 131072, 3, 1835004, 65536, 0, 1769473, 65536, 65536, 1900540, 131072, 65540, 1966076, 131072, 65540, 1966079, 131072, 4, 1835008, 131072, 4, 2031604, 262144, 0, 1966068, 131072, 65540, 1900532, 131072, 65540, 1834996, 65536, 0, 1900551, 131072, 4, 1835016, 131072, 4, 1769481, 65536, 65536, 2097144, 131072, 4, 2162679, 65536, 65537, 2228215, 0, 65538, 2031617, 131072, 65540, 2097153, 65536, 1, 2162688, 0, 2, 2097137, 131072, 65540, 2162673, 65536, 1, 2228208, 0, 2, 2031624, 131072, 4, 2097159, 65536, 65537, 2162695, 0, 65538, -65535, 0, 0, 1, 65536, 1, 65536, 131072, 4, 196607, 262144, 65536, -65512, 0, 65536, 23, 65536, 65537, 65559, 131072, 65540, 131095, 262144, 0, 196606, 0, 1, 131073, 131072, 3, 131074, 196608, 0, 131075, 131072, 3, 131076, 196608, 65536, 131077, 131072, 3, 131078, 131072, 3, 131079, 262144, 0, 131080, 131072, 3, 131081, 131072, 3, 131082, 196608, 0, 131083, 131072, 3, 131084, 196608, 65536, 131085, 131072, 3, 131086, 131072, 3, 131087, 262144, 65536, 131088, 131072, 3, 131089, 131072, 3, 131091, 131072, 3, 131092, 196608, 65536, 131093, 131072, 3, 131094, 131072, 3, 131096, 0, 65537, 131090, 196608, 0, 131072, 131072, 3, 393212, 0, 1, 393213, 131072, 3, 393214, 131072, 3, 393215, 65536, 2, 262144, 131072, 4, 196609, 131072, 4, 327703, 0, 65537, 327702, 131072, 3, 327701, 131072, 3, 327700, 65536, 65538, 262164, 131072, 65540, 196628, 131072, 65540, 196612, 131072, 65540, 262148, 131072, 65540, 327684, 65536, 65538, 327685, 131072, 3, 327686, 131072, 3, 327687, 65536, 2, 262152, 131072, 4, 196617, 131072, 4, 196625, 131072, 4, 262160, 131072, 4, 327695, 65536, 2, 327694, 131072, 3, 327693, 131072, 3, 327692, 65536, 65538, 262156, 131072, 65540, 196620, 131072, 65540, 65543, 131072, 65540, 7, 65536, 65537, -65528, 0, 65536, 65552, 131072, 4, 17, 65536, 1, -65519, 0, 0)
+layer_0/tile_data = PackedInt32Array(2031600, 0, 1, 2031601, 196608, 65536, 2031602, 131072, 3, 2031603, 131072, 3, 2031605, 131072, 3, 2031606, 262144, 65536, 2031607, 131072, 3, 2031608, 131072, 3, 2031609, 196608, 0, 2031610, 131072, 3, 2031611, 131072, 3, 2031612, 262144, 0, 2031613, 131072, 3, 2031614, 262144, 65536, 2031615, 131072, 3, 1966080, 131072, 3, 1966081, 196608, 65536, 1966082, 131072, 3, 1966083, 131072, 3, 1966084, 262144, 0, 1966085, 131072, 3, 1966086, 262144, 65536, 1966087, 131072, 3, 1966088, 131072, 3, 1966089, 196608, 0, 1966090, 0, 65537, 1834993, 0, 1, 1834994, 131072, 3, 1769484, 0, 65537, 1769483, 131072, 3, 1834995, 131072, 3, 1769482, 131072, 3, 1835001, 65536, 65536, 1835002, 131072, 3, 1835003, 131072, 3, 1966071, 131072, 4, 1900536, 131072, 4, 1900548, 131072, 65540, 1835012, 131072, 65540, 1769476, 65536, 0, 1769475, 131072, 3, 1769474, 131072, 3, 1835004, 65536, 0, 1769473, 65536, 65536, 1900540, 131072, 65540, 1966076, 131072, 65540, 1966079, 131072, 4, 1835008, 131072, 4, 2031604, 262144, 0, 1966068, 131072, 65540, 1900532, 131072, 65540, 1834996, 65536, 0, 1900551, 131072, 4, 1835016, 131072, 4, 1769481, 65536, 65536, 2097144, 131072, 4, 2162679, 65536, 65537, 2228215, 0, 65538, 2031617, 131072, 65540, 2097153, 65536, 1, 2162688, 0, 2, 2097137, 131072, 65540, 2162673, 65536, 1, 2228208, 0, 2, 2031624, 131072, 4, 2097159, 65536, 65537, 2162695, 0, 65538, -65535, 0, 0, 1, 65536, 1, 65536, 131072, 4, 196607, 262144, 65536, -65512, 0, 65536, 23, 65536, 65537, 65559, 131072, 65540, 131095, 262144, 0, 196606, 0, 1, 131073, 131072, 3, 131074, 196608, 0, 131075, 131072, 3, 131076, 196608, 65536, 131077, 131072, 3, 131078, 131072, 3, 131079, 262144, 0, 131080, 131072, 3, 131081, 131072, 3, 131082, 196608, 0, 131083, 131072, 3, 131084, 196608, 65536, 131085, 131072, 3, 131086, 131072, 3, 131087, 262144, 65536, 131088, 131072, 3, 131089, 131072, 3, 131091, 131072, 3, 131092, 196608, 65536, 131093, 131072, 3, 131094, 131072, 3, 131096, 0, 65537, 131090, 196608, 0, 131072, 131072, 3, 393212, 0, 1, 393213, 131072, 3, 393214, 131072, 3, 393215, 65536, 2, 262144, 131072, 4, 196609, 131072, 4, 327703, 0, 65537, 327702, 131072, 3, 327701, 131072, 3, 327700, 65536, 65538, 262164, 131072, 65540, 196628, 131072, 65540, 196612, 131072, 65540, 262148, 131072, 65540, 327684, 196608, 65537, 327685, 131072, 3, 327686, 131072, 3, 327687, 196608, 3, 262152, 131072, 4, 196617, 131072, 4, 196625, 131072, 4, 262160, 131072, 4, 327695, 196608, 3, 327694, 196608, 0, 327693, 131072, 3, 327692, 65536, 65538, 262156, 131072, 65540, 196620, 131072, 65540, 65543, 131072, 65540, 7, 65536, 65537, -65528, 0, 65536, 65552, 131072, 4, 17, 65536, 1, -65519, 0, 0, 1703930, 131072, 4, 1638395, 65536, 1, 1572859, 0, 4, 1572860, 262144, 0, 1507324, 65536, 65537, 1441789, 131072, 4, 1376254, 0, 65540, 1376253, 0, 65539, 1310718, 65536, 1, 1245182, 131072, 65540, 1179646, 0, 4, 1179647, 0, 3, 1114111, 131072, 65540, 1048575, 65536, 65537, 917504, 196608, 65538, 851968, 65536, 65537, 786433, 65536, 1, 720897, 65536, 65537, 655362, 65536, 1, 589826, 65536, 65537, 524291, 65536, 1, 458755, 65536, 65537, 393220, 65536, 1, 1769465, 0, 2, 393223, 65536, 1, 458758, 65536, 65537, 524294, 131072, 65540, 589830, 196608, 65539, 655365, 65536, 65537, 720901, 131072, 65540, 786437, 0, 3, 393229, 131072, 4, 458764, 65536, 65537, 524300, 0, 3, 524299, 131072, 0, 589835, 0, 65538, 589831, 131072, 3, 589832, 131072, 3, 589833, 65536, 2, 524298, 65536, 3, 589834, 65536, 4, 393231, 131072, 65540, 458767, 131072, 65540, 524303, 131072, 65540, 589839, 65536, 1, 655374, 0, 65539, 655375, 0, 65540, 720910, 0, 65539, 720911, 0, 65540, 786446, 65536, 2, 786445, 65536, 65536, 851980, 131072, 4, 917515, 131072, 4, 983050, 327680, 65536, 1048585, 0, 2, 983049, 131072, 3, 983048, 131072, 3, 983047, 196608, 0, 983046, 131072, 3, 983045, 131072, 3, 983044, 131072, 3, 983043, 131072, 3, 786436, 0, 4, 851972, 65536, 1, 917507, 131072, 4, 983042, 131072, 2, 917506, 65536, 0, 917505, 65536, 65536, 983040, 65536, 4, 1572861, 0, 65540, 1638396, 0, 65539, 1638397, 65536, 0, 1703933, 131072, 2, 1703934, 131072, 3, 1703935, 65536, 0, 1769471, 65536, 1, 1048582, 131072, 4, 1114117, 131072, 4, 1179652, 65536, 65537, 1245188, 0, 3, 1245187, 65536, 65536, 1310722, 65536, 2, 1310721, 65536, 65536, 1376256, 131072, 4, 1507327, 65536, 65537, 1572863, 0, 3, 1572862, 0, 4, 1638398, 65536, 1, 1048586, 65536, 1, 1114121, 65536, 65537, 1179657, 65536, 1, 1245192, 65536, 65537, 1310728, 131072, 65540, 1376264, 65536, 1, 1441799, 65536, 65537, 1507335, 65536, 1, 1572870, 131072, 4, 1638405, 131072, 4, 1703940, 0, 2, 1835005, 0, 1, 1835006, 262144, 65536, 1835007, 131072, 3, 1769472, 0, 65537)
 layer_1/name = "Construction"
 layer_1/modulate = Color(0.498039, 0.498039, 0, 1)
 layer_1/z_index = -1
@@ -1314,36 +1314,83 @@ width = 3.0
 script = ExtResource("4_8fovb")
 
 [node name="Rifleman" parent="PlayerManager" instance=ExtResource("3_flvlc")]
-position = Vector2(390, 1839)
+position = Vector2(843, 1726)
 
 [node name="Rifleman2" parent="PlayerManager" instance=ExtResource("3_flvlc")]
-position = Vector2(425, 1838)
+position = Vector2(1203, 1660)
+
+[node name="Rifleman3" parent="PlayerManager" instance=ExtResource("3_flvlc")]
+position = Vector2(1443, 1663)
+
+[node name="Rifleman4" parent="PlayerManager" instance=ExtResource("3_flvlc")]
+position = Vector2(565, 1659)
+
+[node name="Rifleman5" parent="PlayerManager" instance=ExtResource("3_flvlc")]
+position = Vector2(998, 1840)
 
 [node name="EnemyManager" type="Node" parent="."]
 script = ExtResource("4_8fovb")
 side = 1
 
-[node name="Rifleman" parent="EnemyManager" instance=ExtResource("3_flvlc")]
-position = Vector2(386, 159)
-side = 1
-
 [node name="Rifleman2" parent="EnemyManager" instance=ExtResource("3_flvlc")]
-position = Vector2(600, 159)
+position = Vector2(363, 161)
 side = 1
 
-[connection signal="soldier_assigned" from="PlayerManager/Rifleman" to="PlayerManager" method="_on_soldier_assigned"]
+[node name="Rifleman3" parent="EnemyManager" instance=ExtResource("3_flvlc")]
+position = Vector2(1484, 284)
+side = 1
+
+[node name="Rifleman4" parent="EnemyManager" instance=ExtResource("3_flvlc")]
+position = Vector2(1091, 164)
+side = 1
+
+[node name="Rifleman5" parent="EnemyManager" instance=ExtResource("3_flvlc")]
+position = Vector2(647, 107)
+side = 1
+
+[node name="Rifleman6" parent="EnemyManager" instance=ExtResource("3_flvlc")]
+position = Vector2(1324, 160)
+side = 1
+
+[connection signal="trench_ownership_updated" from="BuildingGrid" to="PlayerManager" method="_on_trench_ownership_updated"]
+[connection signal="trench_ownership_updated" from="BuildingGrid" to="EnemyManager" method="_on_trench_ownership_updated"]
+[connection signal="soldier_assigned" from="PlayerManager/Rifleman" to="PlayerManager" method="_on_idle_soldier_leave_hex"]
 [connection signal="soldier_entered_hex" from="PlayerManager/Rifleman" to="BuildingGrid" method="_on_soldier_enter_hex"]
 [connection signal="soldier_left_hex" from="PlayerManager/Rifleman" to="BuildingGrid" method="_on_soldier_leave_hex"]
-[connection signal="soldier_unassigned" from="PlayerManager/Rifleman" to="PlayerManager" method="_on_soldier_unassigned"]
-[connection signal="soldier_assigned" from="PlayerManager/Rifleman2" to="PlayerManager" method="_on_soldier_assigned"]
+[connection signal="soldier_unassigned" from="PlayerManager/Rifleman" to="PlayerManager" method="_on_idle_soldier_enter_hex"]
+[connection signal="soldier_assigned" from="PlayerManager/Rifleman2" to="PlayerManager" method="_on_idle_soldier_leave_hex"]
 [connection signal="soldier_entered_hex" from="PlayerManager/Rifleman2" to="BuildingGrid" method="_on_soldier_enter_hex"]
 [connection signal="soldier_left_hex" from="PlayerManager/Rifleman2" to="BuildingGrid" method="_on_soldier_leave_hex"]
-[connection signal="soldier_unassigned" from="PlayerManager/Rifleman2" to="PlayerManager" method="_on_soldier_unassigned"]
-[connection signal="soldier_assigned" from="EnemyManager/Rifleman" to="EnemyManager" method="_on_soldier_assigned"]
-[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman" to="BuildingGrid" method="_on_soldier_enter_hex"]
-[connection signal="soldier_left_hex" from="EnemyManager/Rifleman" to="BuildingGrid" method="_on_soldier_leave_hex"]
-[connection signal="soldier_unassigned" from="EnemyManager/Rifleman" to="EnemyManager" method="_on_soldier_unassigned"]
-[connection signal="soldier_assigned" from="EnemyManager/Rifleman2" to="EnemyManager" method="_on_soldier_assigned"]
+[connection signal="soldier_unassigned" from="PlayerManager/Rifleman2" to="PlayerManager" method="_on_idle_soldier_enter_hex"]
+[connection signal="soldier_assigned" from="PlayerManager/Rifleman3" to="PlayerManager" method="_on_idle_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="PlayerManager/Rifleman3" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="PlayerManager/Rifleman3" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_unassigned" from="PlayerManager/Rifleman3" to="PlayerManager" method="_on_idle_soldier_enter_hex"]
+[connection signal="soldier_assigned" from="PlayerManager/Rifleman4" to="PlayerManager" method="_on_idle_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="PlayerManager/Rifleman4" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="PlayerManager/Rifleman4" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_unassigned" from="PlayerManager/Rifleman4" to="PlayerManager" method="_on_idle_soldier_enter_hex"]
+[connection signal="soldier_assigned" from="PlayerManager/Rifleman5" to="PlayerManager" method="_on_idle_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="PlayerManager/Rifleman5" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="PlayerManager/Rifleman5" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_unassigned" from="PlayerManager/Rifleman5" to="PlayerManager" method="_on_idle_soldier_enter_hex"]
+[connection signal="soldier_assigned" from="EnemyManager/Rifleman2" to="EnemyManager" method="_on_idle_soldier_leave_hex"]
 [connection signal="soldier_entered_hex" from="EnemyManager/Rifleman2" to="BuildingGrid" method="_on_soldier_enter_hex"]
 [connection signal="soldier_left_hex" from="EnemyManager/Rifleman2" to="BuildingGrid" method="_on_soldier_leave_hex"]
-[connection signal="soldier_unassigned" from="EnemyManager/Rifleman2" to="EnemyManager" method="_on_soldier_unassigned"]
+[connection signal="soldier_unassigned" from="EnemyManager/Rifleman2" to="EnemyManager" method="_on_idle_soldier_enter_hex"]
+[connection signal="soldier_assigned" from="EnemyManager/Rifleman3" to="EnemyManager" method="_on_idle_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman3" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman3" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_unassigned" from="EnemyManager/Rifleman3" to="EnemyManager" method="_on_idle_soldier_enter_hex"]
+[connection signal="soldier_assigned" from="EnemyManager/Rifleman4" to="EnemyManager" method="_on_idle_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman4" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman4" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_unassigned" from="EnemyManager/Rifleman4" to="EnemyManager" method="_on_idle_soldier_enter_hex"]
+[connection signal="soldier_assigned" from="EnemyManager/Rifleman5" to="EnemyManager" method="_on_idle_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman5" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman5" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_unassigned" from="EnemyManager/Rifleman5" to="EnemyManager" method="_on_idle_soldier_enter_hex"]
+[connection signal="soldier_assigned" from="EnemyManager/Rifleman6" to="EnemyManager" method="_on_idle_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman6" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman6" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_unassigned" from="EnemyManager/Rifleman6" to="EnemyManager" method="_on_idle_soldier_enter_hex"]

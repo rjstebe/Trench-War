@@ -25,6 +25,8 @@ var enemy_owned_hexes = []
 var ownership_debug_labels = {}
 var update_trench_ownership = true
 
+signal trench_ownership_updated
+
 # Use _tile_data_runtime_update when updating tilemap layers that should have collisions disabled
 func _use_tile_data_runtime_update(layer:int, _coords:Vector2i) -> bool:
 	return layer in NO_COLLIDE_LAYERS
@@ -41,6 +43,7 @@ func _ready():
 func _process(_delta):
 	if update_trench_ownership:
 		_update_trench_ownership()
+		trench_ownership_updated.emit()
 		update_trench_ownership = false
 
 func _on_soldier_enter_hex(soldier:Soldier, hex_position:Vector2i):
@@ -148,7 +151,7 @@ func _update_trench_ownership():
 			contested_trenches.append(hex_position)
 			ownership_debug_labels[hex_position].get_child(0).set("theme_override_colors/font_color",Color.YELLOW)
 			continue
-		# If hex is empty of soldiers or has soldiers of only one side, a search must be made
+		#If hex is empty of soldiers or has soldiers of only one side, a search must be made
 		var result = _trench_region_presence_check(hex_position)
 		# If hex is empty of soldiers, add it to the proper ownership group
 		if player_soldier_count[hex_position] == 0 and enemy_soldier_count[hex_position] == 0:

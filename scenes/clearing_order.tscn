@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bffa7giu7r0y2"]
+
+[ext_resource type="Script" path="res://scripts/orders/clearing_order.gd" id="1_j6fba"]
+[ext_resource type="Script" path="res://scripts/orders/rally_point.gd" id="1_mjfyl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jimpa"]
+
+[node name="ClearingOrder" type="Node2D" node_paths=PackedStringArray("rally_points")]
+script = ExtResource("1_j6fba")
+rally_points = [NodePath("ClearingOrderRallyPoint")]
+
+[node name="ClearingOrderRallyPoint" type="Area2D" parent="."]
+script = ExtResource("1_mjfyl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClearingOrderRallyPoint"]
+shape = SubResource("CircleShape2D_jimpa")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+modulate = Color(1, 1, 1, 0.498039)
+z_index = -1
+polygon = PackedVector2Array(-13, -13, 0, 1, -13, 13, 43, 13, 55, 0, 43, -13)

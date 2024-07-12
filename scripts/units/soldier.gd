@@ -23,8 +23,9 @@ signal soldier_left_hex
 
 func _ready():
 	input_event.connect(InputManager._on_input_event.bind(self))
-	soldier_unassigned.emit(self)
-	soldier_entered_hex.emit(self, InputManager.building_grid.local_to_map(position))
+	var hex_position = InputManager.building_grid.local_to_map(position)
+	soldier_unassigned.emit(self, hex_position)
+	soldier_entered_hex.emit(self, hex_position)
 
 func _physics_process(delta):
 	match(current_behavior):
@@ -53,10 +54,14 @@ func _on_safe_velocity_computed(safe_velocity:Vector2):
 	if new_hex != previous_hex:
 		soldier_left_hex.emit(self, previous_hex)
 		soldier_entered_hex.emit(self, new_hex)
+		if current_rally_point == null:
+			soldier_assigned.emit(self, previous_hex)
+			soldier_unassigned.emit(self, new_hex)
 
 func _remove_soldier():
 	set_rally_point(null)
 	soldier_left_hex.emit(self, InputManager.building_grid.local_to_map(position))
+	soldier_unassigned.emit(self, InputManager.building_grid.local_to_map(position))
 
 func _set_behavior(new_behavior):
 	match(new_behavior):
@@ -76,13 +81,13 @@ func set_rally_point(new_rally_point=null):
 		_set_behavior(Behavior.IDLE)
 		if current_rally_point != null:
 			current_rally_point.assigned_soldiers.erase(self)
-			soldier_unassigned.emit(self)
+			soldier_unassigned.emit(self, InputManager.building_grid.local_to_map(position))
 			current_rally_point = null
 	elif current_rally_point != new_rally_point and new_rally_point.is_assignable():
 		if current_rally_point != null:
 			current_rally_point.assigned_soldiers.erase(self)
 		new_rally_point.assigned_soldiers.append(self)
-		soldier_assigned.emit(self)
+		soldier_assigned.emit(self, InputManager.building_grid.local_to_map(position))
 		current_rally_point = new_rally_point
 		_set_behavior(Behavior.RALLYING)
 	else:
