@@ -1322,6 +1322,12 @@ position = Vector2(560, 1660)
 [node name="Rifleman3" parent="PlayerManager" instance=ExtResource("3_flvlc")]
 position = Vector2(1201, 1662)
 
+[node name="Rifleman4" parent="PlayerManager" instance=ExtResource("3_flvlc")]
+position = Vector2(1440, 1663)
+
+[node name="Rifleman5" parent="PlayerManager" instance=ExtResource("3_flvlc")]
+position = Vector2(1221, 1838)
+
 [node name="EnemyManager" type="Node" parent="."]
 script = ExtResource("4_8fovb")
 side = 1
@@ -1332,6 +1338,18 @@ side = 1
 
 [node name="Rifleman2" parent="EnemyManager" instance=ExtResource("3_flvlc")]
 position = Vector2(642, 100)
+side = 1
+
+[node name="Rifleman3" parent="EnemyManager" instance=ExtResource("3_flvlc")]
+position = Vector2(1524, 220)
+side = 1
+
+[node name="Rifleman4" parent="EnemyManager" instance=ExtResource("3_flvlc")]
+position = Vector2(836, 282)
+side = 1
+
+[node name="Rifleman5" parent="EnemyManager" instance=ExtResource("3_flvlc")]
+position = Vector2(1083, 161)
 side = 1
 
 [connection signal="trench_vision_updated" from="BuildingGrid" to="PlayerManager" method="_on_trench_vision_updated"]
@@ -1348,6 +1366,14 @@ side = 1
 [connection signal="soldier_entered_hex" from="PlayerManager/Rifleman3" to="PlayerManager" method="_on_soldier_enter_hex"]
 [connection signal="soldier_left_hex" from="PlayerManager/Rifleman3" to="BuildingGrid" method="_on_soldier_leave_hex"]
 [connection signal="soldier_left_hex" from="PlayerManager/Rifleman3" to="PlayerManager" method="_on_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="PlayerManager/Rifleman4" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_entered_hex" from="PlayerManager/Rifleman4" to="PlayerManager" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="PlayerManager/Rifleman4" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_left_hex" from="PlayerManager/Rifleman4" to="PlayerManager" method="_on_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="PlayerManager/Rifleman5" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_entered_hex" from="PlayerManager/Rifleman5" to="PlayerManager" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="PlayerManager/Rifleman5" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_left_hex" from="PlayerManager/Rifleman5" to="PlayerManager" method="_on_soldier_leave_hex"]
 [connection signal="soldier_entered_hex" from="EnemyManager/Rifleman" to="BuildingGrid" method="_on_soldier_enter_hex"]
 [connection signal="soldier_entered_hex" from="EnemyManager/Rifleman" to="EnemyManager" method="_on_soldier_enter_hex"]
 [connection signal="soldier_left_hex" from="EnemyManager/Rifleman" to="BuildingGrid" method="_on_soldier_leave_hex"]
@@ -1356,3 +1382,15 @@ side = 1
 [connection signal="soldier_entered_hex" from="EnemyManager/Rifleman2" to="EnemyManager" method="_on_soldier_enter_hex"]
 [connection signal="soldier_left_hex" from="EnemyManager/Rifleman2" to="BuildingGrid" method="_on_soldier_leave_hex"]
 [connection signal="soldier_left_hex" from="EnemyManager/Rifleman2" to="EnemyManager" method="_on_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman3" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman3" to="EnemyManager" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman3" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman3" to="EnemyManager" method="_on_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman4" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman4" to="EnemyManager" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman4" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman4" to="EnemyManager" method="_on_soldier_leave_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman5" to="BuildingGrid" method="_on_soldier_enter_hex"]
+[connection signal="soldier_entered_hex" from="EnemyManager/Rifleman5" to="EnemyManager" method="_on_soldier_enter_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman5" to="BuildingGrid" method="_on_soldier_leave_hex"]
+[connection signal="soldier_left_hex" from="EnemyManager/Rifleman5" to="EnemyManager" method="_on_soldier_leave_hex"]

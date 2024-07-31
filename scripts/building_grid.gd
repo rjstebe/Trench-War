@@ -67,6 +67,7 @@ func _init_hex(hex_position:Vector2i):
 			soldier_vision_label.get_child(0).set("theme_override_colors/font_color",side_colors[side])
 			soldier_vision_label.get_child(0).text = "0"
 			soldier_vision_debug_labels[side][hex_position] = soldier_vision_label
+			trench_pathfinding._get_or_init_point(hex_position)
 
 func _modify_soldier_count(hex_position:Vector2i, side:PlayerManager.Side, change:int):
 	soldier_counts[side][hex_position] += change
