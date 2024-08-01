@@ -71,7 +71,7 @@ func _set_behavior(new_behavior):
 				current_rally_point.position,
 				func lambda(hex):
 					for given_side in PlayerManager.Side.values():
-						if given_side != side and InputManager.building_grid.trench_pathfinding.get_vision_count(hex, given_side) != 0:
+						if given_side != side and InputManager.building_grid.soldier_vision_counts[given_side][hex] != 0:
 							return hex != InputManager.building_grid.local_to_map(current_rally_point.position)
 					return false
 			)

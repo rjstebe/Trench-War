@@ -2,7 +2,6 @@ extends AStar2D
 class_name TrenchPathfinding
 
 var _building_grid:BuildingGrid
-var _vision_counts = [[], []]
 
 func _init(building_grid:BuildingGrid):
 	_building_grid = building_grid
@@ -19,10 +18,6 @@ func _get_or_init_point(hex_position:Vector2i):
 	if point == -1:
 		var new_point = get_available_point_id()
 		add_point(new_point, _building_grid.map_to_local(hex_position))
-		for side in PlayerManager.Side.values():
-			if _vision_counts[side].size() < new_point+1:
-				_vision_counts[side].resize(new_point+1)
-			_vision_counts[side][new_point] = 0
 		return new_point
 	return point
 
@@ -32,30 +27,6 @@ func _get_point(hex_position:Vector2i):
 	if closest_point != -1 and get_point_position(closest_point) != cartesian_position:
 		return -1
 	return closest_point
-
-func _change_vision_count(hex_position:Vector2i, side:PlayerManager.Side, change:int):
-	var point = _get_point(hex_position)
-	if point != -1:
-		_vision_counts[side][point] += change
-
-func _set_vision_count(hex_position:Vector2i, side:PlayerManager.Side, new_value:int):
-	var point = _get_point(hex_position)
-	if point != -1:
-		_vision_counts[side][point] = new_value
-
-func get_vision_count(hex_position:Vector2i, side:PlayerManager.Side):
-	var point = _get_point(hex_position)
-	if point != -1:
-		return _vision_counts[side][point]
-	return -1
-
-func _update_vision_for_tile(hex_position:Vector2i):
-	for side in PlayerManager.Side.values():
-		var running_vision_count = 0
-		for visible_hex in _building_grid.get_trench_hexes_in_line_of_sight(hex_position):
-			if _building_grid.soldier_counts[0].has(visible_hex):
-				running_vision_count += _building_grid.soldier_counts[side][visible_hex]
-		_set_vision_count(hex_position, side, running_vision_count)
 
 func get_hex_position_path(origin_hex:Vector2i, target_hex:Vector2i, disable_hex_conditional:Callable):
 	var disabled_point_list = []

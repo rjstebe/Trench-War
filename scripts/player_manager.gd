@@ -70,13 +70,13 @@ func _on_trench_vision_updated():
 
 func _valid_clearing_origin_hex(hex_position:Vector2i):
 	for given_side in Side.values():
-		if given_side != side and building_grid.trench_pathfinding.get_vision_count(hex_position, given_side) != 0:
+		if given_side != side and building_grid.soldier_vision_counts[given_side][hex_position] != 0:
 			return false
 	return true
 
 func _valid_clearing_target_hex(target_hex:Vector2i):
 	for given_side in Side.values():
-		if given_side != side and building_grid.trench_pathfinding.get_vision_count(target_hex, given_side) != 0:
+		if given_side != side and building_grid.soldier_vision_counts[given_side][target_hex] != 0:
 			return true
 	return false
 
@@ -130,7 +130,7 @@ func update_order_assignments():
 					return false,
 				func lambda(hex):
 					for given_side in Side.values():
-						if given_side != side and building_grid.trench_pathfinding.get_vision_count(hex, given_side) != 0:
+						if given_side != side and building_grid.soldier_vision_counts[given_side][hex] != 0:
 							return hex != building_grid.local_to_map(rally_point.position)
 					return false
 			)
@@ -163,7 +163,7 @@ func update_order_assignments():
 					return false,
 				func lambda(hex):
 					for given_side in Side.values():
-						if given_side != side and building_grid.trench_pathfinding.get_vision_count(hex, given_side) != 0:
+						if given_side != side and building_grid.soldier_vision_counts[given_side][hex] != 0:
 							return true
 					return false
 			)
