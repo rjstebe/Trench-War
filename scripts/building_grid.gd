@@ -1,7 +1,7 @@
 extends TileMap
 class_name BuildingGrid
 
-var debug_label_scene = preload("res://scenes/debug/debug_label.tscn")
+@export var soldier_map:SoldierMap
 
 const PLANNING_LAYER_INDEX = 2
 const CONSTRUCTION_LAYER_INDEX = 1
@@ -12,14 +12,6 @@ var trench_neighbors_lookup_table = {}
 
 const TRENCH_TERRAIN_INDEX = 0
 const TRENCH_TILE_SOURCE_INDEX = 0
-
-var soldier_counts = [{}, {}]
-var soldier_vision_counts = [{}, {}]
-var soldier_count_debug_labels = [{}, {}]
-var soldier_vision_debug_labels = [{}, {}]
-var update_trench_vision = true
-
-signal trench_vision_updated
 
 var trench_pathfinding:TrenchPathfinding = TrenchPathfinding.new(self)
 
@@ -36,51 +28,6 @@ func _ready():
 	for hex_position in get_used_cells(REAL_LAYER_INDEX):
 		for neighbor_position in get_adjacent_trench_hex_positions(hex_position):
 			trench_pathfinding.add_trench(hex_position, neighbor_position)
-		_init_hex(hex_position)
-
-func _process(_delta):
-	if update_trench_vision:
-		trench_vision_updated.emit()
-		update_trench_vision = false
-
-func _on_soldier_enter_hex(soldier:Soldier, hex_position:Vector2i):
-	_modify_soldier_count(hex_position, soldier.side, 1)
-
-func _on_soldier_leave_hex(soldier:Soldier, hex_position:Vector2i):
-	_modify_soldier_count(hex_position, soldier.side, -1)
-
-func _init_hex(hex_position:Vector2i):
-	if not soldier_counts[0].has(hex_position):
-		const side_offsets = [-10, 10]
-		const side_colors = [Color.BLUE, Color.RED]
-		for side in PlayerManager.Side.values():
-			soldier_counts[side][hex_position] = 0
-			var soldier_count_label = debug_label_scene.instantiate()
-			add_child(soldier_count_label)
-			soldier_count_label.position = map_to_local(hex_position)+Vector2(side_offsets[side], -10)
-			soldier_count_label.get_child(0).set("theme_override_colors/font_color",side_colors[side])
-			soldier_count_label.get_child(0).text = "0"
-			soldier_count_debug_labels[side][hex_position] = soldier_count_label
-			soldier_counts[side][hex_position] = 0
-			var soldier_vision_label = debug_label_scene.instantiate()
-			add_child(soldier_vision_label)
-			soldier_vision_label.position = map_to_local(hex_position)+Vector2(side_offsets[side], 10)
-			soldier_vision_label.get_child(0).set("theme_override_colors/font_color",side_colors[side])
-			soldier_vision_label.get_child(0).text = "0"
-			soldier_vision_debug_labels[side][hex_position] = soldier_vision_label
-			soldier_vision_counts[side][hex_position] = 0
-
-func _modify_soldier_count(hex_position:Vector2i, side:PlayerManager.Side, change:int):
-	soldier_counts[side][hex_position] += change
-	soldier_count_debug_labels[side][hex_position].get_child(0).text = str(soldier_counts[side][hex_position])
-	for vision_position in get_trench_hexes_in_line_of_sight(hex_position):
-		_modify_vision_count(vision_position, side, change)
-	update_trench_vision = true
-
-func _modify_vision_count(hex_position:Vector2i, side:PlayerManager.Side, change:int):
-	soldier_vision_counts[side][hex_position] += change
-	soldier_vision_debug_labels[side][hex_position].get_child(0).text = str(soldier_vision_counts[side][hex_position])
-	update_trench_vision = true
 
 func _set_up_trench_neighbors_lookup_table():
 	for atlas_coord_and_alt_id in _get_all_trench_atlas_coords_and_alt_ids():
@@ -129,17 +76,15 @@ func build_trench(hex_position_a, hex_position_b):
 	_erase_half_trench_segment(CONSTRUCTION_LAYER_INDEX, hex_position_a, get_neighbor_from_direction(hex_position_b-hex_position_a))
 	_erase_half_trench_segment(CONSTRUCTION_LAYER_INDEX, hex_position_b, get_neighbor_from_direction(hex_position_a-hex_position_b))
 	#Initialize new hexes if applicable
-	_init_hex(hex_position_a)
-	_init_hex(hex_position_b)
+	soldier_map._init_hex(hex_position_a)
+	soldier_map._init_hex(hex_position_b)
 	#Update vision data
 	var newly_visible_trenches = _get_trench_hexes_in_line_of_sight_in_direction(hex_position_a, hex_position_b-hex_position_a)
 	newly_visible_trenches.append_array(_get_trench_hexes_in_line_of_sight_in_direction(hex_position_b, hex_position_a-hex_position_b))
 	for hex_position in newly_visible_trenches:
-		_update_vision_for_tile(hex_position)
-		for side in PlayerManager.Side.values():
-			soldier_vision_debug_labels[side][hex_position].get_child(0).text = str(soldier_vision_counts[side][hex_position])
+		soldier_map.update_vision_for_tile(hex_position)
 	trench_pathfinding.add_trench(hex_position_a, hex_position_b)
-	update_trench_vision = true
+	soldier_map.update_trench_vision = true
 
 func get_neighbor_list():
 	return [
@@ -228,14 +173,6 @@ func _get_trench_hexes_in_line_of_sight_in_direction(hex_position:Vector2i, dire
 		trench_positions.append(current_hex_position)
 		current_hex = get_cell_tile_data(REAL_LAYER_INDEX, current_hex_position)
 	return trench_positions
-
-func _update_vision_for_tile(hex_position:Vector2i):
-	for side in PlayerManager.Side.values():
-		var running_vision_count = 0
-		for visible_hex in get_trench_hexes_in_line_of_sight(hex_position):
-			if soldier_counts[0].has(visible_hex):
-				running_vision_count += soldier_counts[side][visible_hex]
-		soldier_vision_counts[side][hex_position] = running_vision_count
 
 func hex_line(start_cell:Vector2i, end_cell:Vector2i) -> Array[Vector2i]:
 	var start_position:Vector2 = map_to_local(start_cell)

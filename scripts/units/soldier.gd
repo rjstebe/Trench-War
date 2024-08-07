@@ -1,6 +1,10 @@
 extends CharacterBody2D
 class_name Soldier
 
+var debug_path_line_scene = preload("res://scenes/debug/debug_path_line.tscn")
+
+const show_debug_path = false
+
 # Unit Stats
 @export var speed = 40
 @export var build_speed = 1
@@ -8,6 +12,7 @@ class_name Soldier
 # References to child objects
 @onready var nav_agent = $"./NavigationAgent"
 @onready var selection_marker = $"./SelectionMarker"
+var debug_path_line:Line2D
 
 # Unit State
 enum Behavior {IDLE, RALLYING, EXECUTING, FIGHTING}
@@ -64,21 +69,36 @@ func _set_behavior(new_behavior):
 	match(new_behavior):
 		Behavior.IDLE:
 			nav_agent.avoidance_priority = 0
+			clear_path()
 		Behavior.RALLYING:
 			nav_agent.avoidance_priority = 1
-			current_path = InputManager.building_grid.trench_pathfinding.get_position_path(
-				position,
-				current_rally_point.position,
-				func lambda(hex):
-					for given_side in PlayerManager.Side.values():
-						if given_side != side and InputManager.building_grid.soldier_vision_counts[given_side][hex] != 0:
-							return hex != InputManager.building_grid.local_to_map(current_rally_point.position)
-					return false
-			)
+			set_path(current_rally_point.position)
 			nav_agent.target_position = current_path.pop_front() #TODO make this always follow the next point in the hexagonal path if soldier is in trench mode
 		Behavior.EXECUTING:
 			nav_agent.avoidance_priority = 0
+			clear_path()
 	current_behavior = new_behavior
+
+func set_path(destination:Vector2):
+	current_path = InputManager.building_grid.trench_pathfinding.get_position_path(
+		position,
+		destination,
+		func lambda(hex):
+			for given_side in PlayerManager.Side.values():
+				if given_side != side and InputManager.soldier_map.soldier_vision_counts[given_side][hex] != 0:
+					return hex != InputManager.building_grid.local_to_map(destination)
+			return false
+	)
+	if show_debug_path:
+		if debug_path_line == null:
+			debug_path_line = debug_path_line_scene.instantiate()
+			get_parent().add_child(debug_path_line)
+		debug_path_line.points = [position, destination]
+
+func clear_path():
+	current_path = []
+	if show_debug_path:
+		debug_path_line.points = []
 
 # Assign a rally point to this soldier and adjust behavior accordingly
 # null represents unassigning the soldier without a replacement rally point

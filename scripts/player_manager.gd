@@ -4,7 +4,8 @@ class_name PlayerManager
 var build_trench_order_scene = preload("res://scenes/build_trench_order.tscn")
 var clearing_order_scene = preload("res://scenes/clearing_order.tscn")
 
-@onready var building_grid = InputManager.building_grid
+@export var building_grid:BuildingGrid
+@export var soldier_map:SoldierMap
 
 enum Side {PLAYER, ENEMY}
 @export var side = Side.PLAYER
@@ -14,7 +15,6 @@ var build_order_rally_points:Array[Dictionary] = [{},{},{}]
 var build_trench_order_location_lookup:Dictionary = {}
 var clearing_order_rally_points:Array[Dictionary] = [{},{},{}]
 var clearing_order_location_lookup:Dictionary = {}
-var soldier_lookup:Dictionary = {}
 var _update_assignments_this_frame:bool = true
 
 func _physics_process(_delta):
@@ -43,20 +43,6 @@ func _on_rally_point_removed(rally_point:RallyPoint):
 			clearing_order_rally_points[i].erase(rally_point)
 	_update_assignments_this_frame = true
 
-func _on_soldier_enter_hex(soldier:Soldier, hex_position:Vector2i):
-	var new_list = []
-	if soldier_lookup.has(hex_position):
-		new_list = soldier_lookup[hex_position]
-	new_list.append(soldier)
-	soldier_lookup[hex_position] = new_list
-
-func _on_soldier_leave_hex(soldier:Soldier, hex_position:Vector2i):
-	if not soldier_lookup.has(hex_position):
-		return
-	var new_list = soldier_lookup[hex_position]
-	new_list.erase(soldier)
-	soldier_lookup[hex_position] = new_list
-
 func _on_trench_vision_updated():
 	for hex_position in building_grid.get_used_cells(building_grid.REAL_LAYER_INDEX):
 		if _valid_clearing_origin_hex(hex_position):
@@ -70,13 +56,13 @@ func _on_trench_vision_updated():
 
 func _valid_clearing_origin_hex(hex_position:Vector2i):
 	for given_side in Side.values():
-		if given_side != side and building_grid.soldier_vision_counts[given_side][hex_position] != 0:
+		if given_side != side and soldier_map.soldier_vision_counts[given_side][hex_position] != 0:
 			return false
 	return true
 
 func _valid_clearing_target_hex(target_hex:Vector2i):
 	for given_side in Side.values():
-		if given_side != side and building_grid.soldier_vision_counts[given_side][target_hex] != 0:
+		if given_side != side and soldier_map.soldier_vision_counts[given_side][target_hex] != 0:
 			return true
 	return false
 
@@ -123,20 +109,20 @@ func update_order_assignments():
 			var soldier_hex = building_grid.trench_pathfinding.get_closest_hex_by_trench( \
 				building_grid.local_to_map(rally_point.position), \
 				func lambda(hex):
-					if soldier_lookup.has(hex):
-						for soldier in soldier_lookup[hex]:
+					if soldier_map.hex_exists(hex):
+						for soldier in soldier_map.trench_occupation[side][hex]:
 							if _clearing_soldier_selection_condition(soldier):
 								return true
 					return false,
 				func lambda(hex):
 					for given_side in Side.values():
-						if given_side != side and building_grid.soldier_vision_counts[given_side][hex] != 0:
+						if given_side != side and soldier_map.soldier_vision_counts[given_side][hex] != 0:
 							return hex != building_grid.local_to_map(rally_point.position)
 					return false
 			)
 			var soldier = null
 			if soldier_hex != null:
-				for potential_soldier in soldier_lookup[soldier_hex]:
+				for potential_soldier in soldier_map.trench_occupation[side][soldier_hex]:
 					if _clearing_soldier_selection_condition(potential_soldier):
 						soldier = potential_soldier
 						break
@@ -156,20 +142,20 @@ func update_order_assignments():
 			var soldier_hex = building_grid.trench_pathfinding.get_closest_hex_by_trench( \
 				building_grid.local_to_map(rally_point.position), \
 				func lambda(hex):
-					if soldier_lookup.has(hex):
-						for soldier in soldier_lookup[hex]:
+					if soldier_map.hex_exists(hex):
+						for soldier in soldier_map.trench_occupation[side][hex]:
 							if _building_soldier_selection_condition(soldier):
 								return true
 					return false,
 				func lambda(hex):
 					for given_side in Side.values():
-						if given_side != side and building_grid.soldier_vision_counts[given_side][hex] != 0:
+						if given_side != side and soldier_map.soldier_vision_counts[given_side][hex] != 0:
 							return true
 					return false
 			)
 			var soldier = null
 			if soldier_hex != null:
-				for potential_soldier in soldier_lookup[soldier_hex]:
+				for potential_soldier in soldier_map.trench_occupation[side][soldier_hex]:
 					if _building_soldier_selection_condition(potential_soldier):
 						soldier = potential_soldier
 						break
@@ -178,8 +164,8 @@ func update_order_assignments():
 				build_order_rally_points[i].erase(rally_point)
 				build_order_rally_points[i+1][rally_point] = null
 
-func _clearing_soldier_selection_condition(soldier):
-	return (soldier.current_rally_point == null or soldier.current_rally_point is BuildOrder)
+func _clearing_soldier_selection_condition(_soldier):
+	return true
 
 func _building_soldier_selection_condition(soldier):
 	return soldier.current_rally_point == null

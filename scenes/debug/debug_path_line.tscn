@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://ctrr8p2m05oh6"]
+
+[node name="DebugPathLine" type="Line2D"]
+width = 1.0

@@ -5,8 +5,9 @@ extends Node
 @export var selection = {}
 
 # Global References
-@onready var building_grid = $"../Battle/BuildingGrid"
+@onready var building_grid = $"../Battle/Map/BuildingGrid"
 @onready var player_manager = $"../Battle/PlayerManager"
+@onready var soldier_map = $"../Battle/Map/SoldierMap"
 
 func _unhandled_key_input(event:InputEvent):
 	if input_mode != null:
