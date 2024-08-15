@@ -1,8 +1,8 @@
 [gd_scene load_steps=72 format=3 uid="uid://c1hmyq0kgv42i"]
 
 [ext_resource type="Texture2D" uid="uid://cbasph2bmgho0" path="res://sprites/trench_sprite_sheet.png" id="1_83lr7"]
-[ext_resource type="Script" path="res://scripts/building_grid.gd" id="2_tn6q0"]
-[ext_resource type="Script" path="res://scripts/soldier_map.gd" id="3_346bc"]
+[ext_resource type="Script" path="res://scripts/map/building_grid.gd" id="2_tn6q0"]
+[ext_resource type="Script" path="res://scripts/map/soldier_map.gd" id="3_346bc"]
 [ext_resource type="PackedScene" uid="uid://bc6asikqwrs3x" path="res://scenes/rifleman.tscn" id="3_flvlc"]
 [ext_resource type="Script" path="res://scripts/player_manager.gd" id="4_8fovb"]
 [ext_resource type="Script" path="res://scripts/camera_2d.gd" id="4_sebhu"]
