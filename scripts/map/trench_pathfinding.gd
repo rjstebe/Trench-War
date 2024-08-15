@@ -58,22 +58,29 @@ func get_position_path(origin_position:Vector2, target_position:Vector2, disable
 		position_path[position_path.size()-1] = target_position
 	return position_path
 
-# Returns closest hex to given position that satisfies the given conditional function
+# Returns array with the following results:
+# index 0: the closest hex to given position that satisfies the given conditional function
 # following only trench connections
+# index 1: the final distance it took to arrive at the located hex
 # Uses a basic depth-first search to achieve this
 func get_closest_hex_by_trench(hex_position:Vector2i, target_conditional:Callable, disabled_hex_conditional:Callable):
+	var current_distance = 0
 	var next_hexes = [hex_position]
+	var next_layer = []
 	var searched_hexes = []
 	while not next_hexes.is_empty():
 		var current_hex = next_hexes.pop_front()
-		if disabled_hex_conditional.call(current_hex):
-			continue
-		if target_conditional.call(current_hex):
-			return current_hex
-		searched_hexes.append(current_hex)
-		for adjacent_position in _building_grid.get_adjacent_trench_hex_positions(current_hex):
-			if not next_hexes.has(adjacent_position) and not searched_hexes.has(adjacent_position):
-				next_hexes.append(adjacent_position)
+		if not disabled_hex_conditional.call(current_hex):
+			if target_conditional.call(current_hex, current_distance):
+				return [current_hex, current_distance]
+			searched_hexes.append(current_hex)
+			for adjacent_position in _building_grid.get_adjacent_trench_hex_positions(current_hex):
+				if not next_hexes.has(adjacent_position) and not searched_hexes.has(adjacent_position) and not next_layer.has(adjacent_position):
+					next_layer.append(adjacent_position)
+		if next_hexes.is_empty():
+			next_hexes = next_layer
+			next_layer = []
+			current_distance += 1
 	# If this point is reached the trench system has been searched exhaustively
 	# without finding a hex that satisfies the given condition, so return null
 	# to signify that

@@ -100,10 +100,6 @@ func create_clearing_trench_order(trench_position:Array):
 	clearing_order_location_lookup[trench_position] = clearing_order
 	_update_assignments_this_frame = true
 
-#func get_build_trench_order_by_location(hex_position_a:Vector2i, hex_position_b:Vector2i):
-	#if build_trench_order_location_lookup.has([hex_position_a, hex_position_b]):
-		#return build_trench_order_location_lookup[[hex_position_a, hex_position_b]]
-
 func update_order_assignments():
 	rally_points_by_assignment_priority.sort_custom(rally_point_priority_comparator)
 	for i in range(0, rally_points_by_assignment_priority.size()):
@@ -111,24 +107,30 @@ func update_order_assignments():
 		var rally_point_priority = _get_rally_point_assignment_priority(rally_point)
 		if rally_point_priority <= 0:
 			break
-		var soldier_hex = building_grid.trench_pathfinding.get_closest_hex_by_trench( \
+		var results = building_grid.trench_pathfinding.get_closest_hex_by_trench( \
 		building_grid.local_to_map(rally_point.position), \
-		func lambda(hex):
+		func lambda(hex, hex_distance):
 			if soldier_map.hex_exists(hex):
 				for potential_soldier in soldier_map.trench_occupation[side][hex]:
-					if _get_soldier_persistance_priority(potential_soldier) < rally_point_priority:
+					var soldier_priority = _get_soldier_persistance_priority(potential_soldier)
+					if soldier_priority < rally_point_priority or \
+					(soldier_priority == rally_point_priority and hex_distance < potential_soldier.current_path.size()-1):
 						return true
 			return false,
 		func lambda(hex):
 			for given_side in Side.values():
-				if given_side != side and soldier_map.soldier_vision_counts[given_side][hex] != 0:
+				if given_side != side and (not soldier_map.hex_exists(hex) or soldier_map.soldier_vision_counts[given_side][hex] != 0):
 					return hex != building_grid.local_to_map(rally_point.position)
 			return false
 		)
-		if soldier_hex != null:
+		if results != null:
+			var soldier_hex = results[0]
+			var final_distance = results[1]
 			var soldier = null
 			for potential_soldier in soldier_map.trench_occupation[side][soldier_hex]:
-				if _get_soldier_persistance_priority(potential_soldier) < rally_point_priority:
+				var soldier_priority = _get_soldier_persistance_priority(potential_soldier)
+				if soldier_priority < rally_point_priority or \
+					(soldier_priority == rally_point_priority and final_distance < potential_soldier.current_path.size()-1):
 					soldier = potential_soldier
 			var prior_rally_point = soldier.current_rally_point
 			soldier.set_rally_point(rally_points_by_assignment_priority[i])

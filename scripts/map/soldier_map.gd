@@ -10,6 +10,7 @@ const show_debug_labels = false
 var trench_occupation = [{}, {}]
 var soldier_vision_counts = [{}, {}]
 
+var hex_position_debug_labels = {}
 var soldier_count_debug_labels = [{}, {}]
 var soldier_vision_debug_labels = [{}, {}]
 
@@ -76,6 +77,13 @@ func _init_hex(hex_position:Vector2i):
 	if not hex_exists(hex_position):
 		const side_offsets = [-10, 10]
 		const side_colors = [Color.BLUE, Color.RED]
+		if show_debug_labels:
+			var hex_position_label = debug_label_scene.instantiate()
+			add_child(hex_position_label)
+			hex_position_label.position = building_grid.map_to_local(hex_position)+Vector2(0, -20)
+			hex_position_label.get_child(0).set("theme_override_colors/font_color",Color.YELLOW)
+			hex_position_label.get_child(0).text = str(hex_position)
+			hex_position_debug_labels[hex_position] = hex_position_label
 		for side in PlayerManager.Side.values():
 			if show_debug_labels:
 				var soldier_count_label = debug_label_scene.instantiate()

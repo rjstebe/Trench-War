@@ -34,7 +34,7 @@ func _physics_process(delta):
 	match(current_behavior):
 		Behavior.RALLYING:
 			if nav_agent.is_navigation_finished():
-				if current_path.size() > 0:
+				if current_path.size() > 1:
 					nav_agent.target_position = current_path.pop_front()
 				else:
 					_set_behavior(Behavior.EXECUTING)
@@ -69,14 +69,11 @@ func _set_behavior(new_behavior):
 	match(new_behavior):
 		Behavior.IDLE:
 			nav_agent.avoidance_priority = 0
-			clear_path()
 		Behavior.RALLYING:
 			nav_agent.avoidance_priority = 1
-			set_path(current_rally_point.position)
-			nav_agent.target_position = current_path.pop_front() #TODO make this always follow the next point in the hexagonal path if soldier is in trench mode
+			nav_agent.target_position = current_path[0]
 		Behavior.EXECUTING:
 			nav_agent.avoidance_priority = 0
-			clear_path()
 	current_behavior = new_behavior
 
 func set_path(destination:Vector2):
@@ -104,6 +101,7 @@ func clear_path():
 # null represents unassigning the soldier without a replacement rally point
 func set_rally_point(new_rally_point=null):
 	if new_rally_point == null:
+		clear_path()
 		_set_behavior(Behavior.IDLE)
 		if current_rally_point != null:
 			current_rally_point.assigned_soldiers.erase(self)
@@ -113,6 +111,7 @@ func set_rally_point(new_rally_point=null):
 			current_rally_point.assigned_soldiers.erase(self)
 		new_rally_point.assigned_soldiers.append(self)
 		current_rally_point = new_rally_point
+		set_path(current_rally_point.position)
 		_set_behavior(Behavior.RALLYING)
 	else:
 		print("Soldier could not be assigned to rally point, either it is already assigned, or the rally point is at its capacity for assigned soldiers")
