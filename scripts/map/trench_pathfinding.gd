@@ -74,7 +74,7 @@ func get_closest_hex_by_trench(hex_position:Vector2i, target_conditional:Callabl
 			if target_conditional.call(current_hex, current_distance):
 				return [current_hex, current_distance]
 			searched_hexes.append(current_hex)
-			for adjacent_position in _building_grid.get_adjacent_trench_hex_positions(current_hex):
+			for adjacent_position in _building_grid.get_adjacent_trench_hex_positions(_building_grid, current_hex):
 				if not next_hexes.has(adjacent_position) and not searched_hexes.has(adjacent_position) and not next_layer.has(adjacent_position):
 					next_layer.append(adjacent_position)
 		if next_hexes.is_empty():

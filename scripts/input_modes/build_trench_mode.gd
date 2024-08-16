@@ -19,13 +19,13 @@ func _unhandled_key_input(event:InputEvent):
 func _unhandled_input(event:InputEvent):
 	if event is InputEventMouseMotion:
 		mouse_hex = building_grid.local_to_map(building_grid.get_local_mouse_position())
-		building_grid.clear_layer(building_grid.PLANNING_LAYER_INDEX)
+		building_grid.planning_grid.clear()
 		if start_hex != null:
-			building_grid.set_cells_terrain_path(building_grid.PLANNING_LAYER_INDEX, building_grid.hex_line(start_hex,mouse_hex), 0, 0)
+			building_grid.planning_grid.set_cells_terrain_path(building_grid.hex_line(start_hex,mouse_hex), 0, 0)
 		return
 	if event.is_action_released("select"):
 		if start_hex != null:
-			building_grid.clear_layer(building_grid.PLANNING_LAYER_INDEX)
+			building_grid.planning_grid.clear()
 			_set_construction_layer(building_grid.hex_line(start_hex,mouse_hex))
 			InputManager.input_mode = DefaultInputMode.new()
 			return
@@ -40,7 +40,7 @@ func _set_construction_layer(hex_line:Array[Vector2i]):
 	var start_index = 0
 	var end_index = 0
 	for i in range(hex_line.size()):
-		var current_real_hex = building_grid.get_cell_tile_data(building_grid.REAL_LAYER_INDEX,hex_line[i])
+		var current_real_hex = building_grid.get_cell_tile_data(hex_line[i])
 		# add line to lines if (current is real or at end of hex_line) and currently counting
 		if current_real_hex != null or i + 1 >= hex_line.size():
 			if end_index > start_index:
@@ -60,7 +60,7 @@ func _set_construction_layer(hex_line:Array[Vector2i]):
 			end_index = i+1
 	
 	for line in lines:
-		building_grid.set_cells_terrain_path(building_grid.CONSTRUCTION_LAYER_INDEX, line, 0, building_grid.TRENCH_TERRAIN_INDEX)
+		building_grid.construction_grid.set_cells_terrain_path(line, 0, building_grid.TRENCH_TERRAIN_INDEX)
 	
 	for trench_position in build_trench_order_positions:
 		InputManager.player_manager.create_build_trench_order(trench_position)

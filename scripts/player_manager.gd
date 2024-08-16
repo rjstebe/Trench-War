@@ -51,9 +51,9 @@ func _on_rally_point_removed(rally_point:RallyPoint):
 	_update_assignments_this_frame = true
 
 func _on_trench_vision_updated():
-	for hex_position in building_grid.get_used_cells(building_grid.REAL_LAYER_INDEX):
+	for hex_position in building_grid.get_used_cells():
 		if _valid_clearing_origin_hex(hex_position):
-			for neighbor_position in building_grid.get_adjacent_trench_hex_positions(hex_position):
+			for neighbor_position in building_grid.get_adjacent_trench_hex_positions(building_grid, hex_position):
 				if _valid_clearing_target_hex(neighbor_position):
 					create_clearing_trench_order([hex_position, neighbor_position-hex_position])
 	for location in clearing_order_location_lookup.keys():

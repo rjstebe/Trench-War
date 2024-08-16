@@ -35,7 +35,7 @@ func _update_position():
 	var motion_vector : Vector2 = Vector2(motion_input).normalized() * SCROLL_SPEED
 	position += motion_vector * _current_zoom
 	_apply_limits()
-	emit_signal("moved")
+	moved.emit()
 
 func _update_zoom(increment : float, zoom_anchor : Vector2):
 	var old_zoom = _current_zoom
@@ -49,7 +49,7 @@ func _update_zoom(increment : float, zoom_anchor : Vector2):
 	
 	set_zoom(Vector2.ONE / Vector2(_current_zoom, _current_zoom))
 	_apply_limits()
-	emit_signal("zoomed")
+	zoomed.emit()
 
 func _apply_limits():
 	var view_offset = Vector2(0,0) * _current_zoom + Vector2(20, 20)

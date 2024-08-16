@@ -3,7 +3,7 @@ class_name InputMode
 
 var name = "Unknown"
 var help_text = "You should not be seeing this"
-var building_grid:TileMap = null
+var building_grid:TileMapLayer = null
 var human_player_manager:PlayerManager = null
 
 func _init():
