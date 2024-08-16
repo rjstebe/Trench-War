@@ -85,3 +85,18 @@ func get_closest_hex_by_trench(hex_position:Vector2i, target_conditional:Callabl
 	# without finding a hex that satisfies the given condition, so return null
 	# to signify that
 	return null
+
+# Checks to see if given path is still valid according to the given disabled hex conditional
+func check_path(path, disabled_hex_conditional:Callable):
+	for i in range(0, path.size()):
+		var position = path[i]
+		var hex = _building_grid.local_to_map(position)
+		var tile_data = _building_grid.get_cell_tile_data(hex)
+		var neighbor
+		if i != 0:
+			var prev_hex = _building_grid.local_to_map(path[i-1])
+			neighbor = _building_grid.get_neighbor_from_direction(prev_hex-hex)
+		if disabled_hex_conditional.call(hex) and \
+		(i == 0 or tile_data.get_terrain_peering_bit(neighbor) == _building_grid.TRENCH_TERRAIN_INDEX):
+			return false
+	return true

@@ -59,6 +59,9 @@ func _on_trench_vision_updated():
 	for location in clearing_order_location_lookup.keys():
 		if not _valid_clearing_origin_hex(location[0]) or not _valid_clearing_target_hex(location[0]+location[1]):
 			clearing_order_location_lookup[location]._remove_order()
+	for child in get_children():
+		if child is Soldier and child.current_path.size() > 0:
+			child.set_path(child.current_path.back())
 	_update_assignments_this_frame = true
 
 func _valid_clearing_origin_hex(hex_position:Vector2i):

@@ -3,7 +3,7 @@ class_name Soldier
 
 var debug_path_line_scene = preload("res://scenes/debug/debug_path_line.tscn")
 
-const show_debug_path = false
+const show_debug_path = true
 
 # Unit Stats
 @export var speed = 40
@@ -35,7 +35,8 @@ func _physics_process(delta):
 		Behavior.RALLYING:
 			if nav_agent.is_navigation_finished():
 				if current_path.size() > 1:
-					nav_agent.target_position = current_path.pop_front()
+					current_path.pop_front()
+					nav_agent.target_position = current_path[0]
 				else:
 					_set_behavior(Behavior.EXECUTING)
 		Behavior.EXECUTING:
@@ -77,15 +78,17 @@ func _set_behavior(new_behavior):
 	current_behavior = new_behavior
 
 func set_path(destination:Vector2):
-	current_path = InputManager.building_grid.trench_pathfinding.get_position_path(
-		position,
-		destination,
-		func lambda(hex):
+	var disabled_hex_conditional = \
+		func lambda(hex): 
 			for given_side in PlayerManager.Side.values():
 				if given_side != side and InputManager.soldier_map.soldier_vision_counts[given_side][hex] != 0:
 					return hex != InputManager.building_grid.local_to_map(destination)
 			return false
-	)
+	if current_path.size() == 0 or current_path.back() != destination or \
+	not InputManager.building_grid.trench_pathfinding.check_path(current_path, disabled_hex_conditional):
+		current_path = InputManager.building_grid.trench_pathfinding.get_position_path(position, destination, disabled_hex_conditional)
+	if current_path.size() == 0: #If no valid path found, unassign self from current rally point
+		set_rally_point(null)
 	if show_debug_path:
 		if debug_path_line == null:
 			debug_path_line = debug_path_line_scene.instantiate()
