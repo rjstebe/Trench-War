@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=4 uid="uid://c1hmyq0kgv42i"]
+[gd_scene load_steps=73 format=4 uid="uid://c1hmyq0kgv42i"]
 
 [ext_resource type="Texture2D" uid="uid://cbasph2bmgho0" path="res://sprites/trench_sprite_sheet.png" id="1_83lr7"]
 [ext_resource type="Script" path="res://scripts/map/building_grid.gd" id="2_tn6q0"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bc6asikqwrs3x" path="res://scenes/rifleman.tscn" id="3_flvlc"]
 [ext_resource type="Script" path="res://scripts/player_manager.gd" id="4_8fovb"]
 [ext_resource type="Script" path="res://scripts/camera_2d.gd" id="4_sebhu"]
+[ext_resource type="Texture2D" uid="uid://gg4n8jbl885w" path="res://sprites/enemy_rifleman.png" id="7_p0mxr"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_wpsh2"]
 vertices = PackedVector2Array(25, 27, 15, 32, -6, 0, -3, -5, 3, -5)
@@ -1225,21 +1226,36 @@ side = 1
 position = Vector2(348, 161)
 side = 1
 
+[node name="Sprite" parent="EnemyManager/Rifleman" index="1"]
+texture = ExtResource("7_p0mxr")
+
 [node name="Rifleman2" parent="EnemyManager" instance=ExtResource("3_flvlc")]
 position = Vector2(642, 100)
 side = 1
+
+[node name="Sprite" parent="EnemyManager/Rifleman2" index="1"]
+texture = ExtResource("7_p0mxr")
 
 [node name="Rifleman3" parent="EnemyManager" instance=ExtResource("3_flvlc")]
 position = Vector2(1524, 220)
 side = 1
 
+[node name="Sprite" parent="EnemyManager/Rifleman3" index="1"]
+texture = ExtResource("7_p0mxr")
+
 [node name="Rifleman4" parent="EnemyManager" instance=ExtResource("3_flvlc")]
 position = Vector2(836, 282)
 side = 1
 
+[node name="Sprite" parent="EnemyManager/Rifleman4" index="1"]
+texture = ExtResource("7_p0mxr")
+
 [node name="Rifleman5" parent="EnemyManager" instance=ExtResource("3_flvlc")]
 position = Vector2(1083, 161)
 side = 1
+
+[node name="Sprite" parent="EnemyManager/Rifleman5" index="1"]
+texture = ExtResource("7_p0mxr")
 
 [connection signal="trench_vision_updated" from="Map/SoldierMap" to="PlayerManager" method="_on_trench_vision_updated"]
 [connection signal="trench_vision_updated" from="Map/SoldierMap" to="EnemyManager" method="_on_trench_vision_updated"]
@@ -1263,3 +1279,9 @@ side = 1
 [connection signal="soldier_left_hex" from="EnemyManager/Rifleman4" to="Map/SoldierMap" method="_on_soldier_leave_hex"]
 [connection signal="soldier_entered_hex" from="EnemyManager/Rifleman5" to="Map/SoldierMap" method="_on_soldier_enter_hex"]
 [connection signal="soldier_left_hex" from="EnemyManager/Rifleman5" to="Map/SoldierMap" method="_on_soldier_leave_hex"]
+
+[editable path="EnemyManager/Rifleman"]
+[editable path="EnemyManager/Rifleman2"]
+[editable path="EnemyManager/Rifleman3"]
+[editable path="EnemyManager/Rifleman4"]
+[editable path="EnemyManager/Rifleman5"]
