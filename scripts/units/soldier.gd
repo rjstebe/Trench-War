@@ -8,6 +8,7 @@ const show_debug_path = true
 # Unit Stats
 @export var speed = 40
 @export var build_speed = 1
+@export var reload_time = 1 # Time to reload in seconds
 
 # References to child objects
 @onready var nav_agent = $"./NavigationAgent"
@@ -19,6 +20,7 @@ enum Behavior {IDLE, RALLYING, EXECUTING, FIGHTING}
 var current_behavior = Behavior.IDLE
 @export var current_rally_point:RallyPoint = null
 var current_path = []
+var reload_state = 0
 
 @export var side:PlayerManager.Side
 
@@ -44,6 +46,14 @@ func _physics_process(delta):
 				_set_behavior(Behavior.RALLYING)
 			elif current_rally_point.get_parent() is BuildOrder:
 				current_rally_point.get_parent().progress_build(build_speed*delta)
+			elif current_rally_point.get_parent() is ClearingOrder:
+				_set_behavior(Behavior.FIGHTING)
+		Behavior.FIGHTING:
+			if reload_state > 0:
+				reload_state -= delta
+			else:
+				reload_state = reload_time
+				print("fire!")
 	match(current_behavior):
 		Behavior.RALLYING:
 			var next_waypoint: Vector2 = nav_agent.get_next_path_position()
@@ -51,6 +61,8 @@ func _physics_process(delta):
 		Behavior.IDLE:
 			nav_agent.set_velocity(Vector2.ZERO)
 		Behavior.EXECUTING:
+			nav_agent.set_velocity(Vector2.ZERO)
+		Behavior.FIGHTING:
 			nav_agent.set_velocity(Vector2.ZERO)
 
 func _on_safe_velocity_computed(safe_velocity:Vector2):
@@ -71,10 +83,12 @@ func _set_behavior(new_behavior):
 		Behavior.IDLE:
 			nav_agent.avoidance_priority = 0
 		Behavior.RALLYING:
-			nav_agent.avoidance_priority = 1
+			nav_agent.avoidance_priority = 0.5
 			nav_agent.target_position = current_path[0]
 		Behavior.EXECUTING:
 			nav_agent.avoidance_priority = 0
+		Behavior.FIGHTING:
+			nav_agent.avoidance_priority = 1
 	current_behavior = new_behavior
 
 func set_path(destination:Vector2):
