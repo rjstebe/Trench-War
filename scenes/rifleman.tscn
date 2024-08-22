@@ -36,4 +36,8 @@ closed = true
 width = 1.0
 default_color = Color(0, 0.74902, 0, 0.498039)
 
+[node name="RayCast2D" type="RayCast2D" parent="."]
+enabled = false
+collide_with_areas = true
+
 [connection signal="velocity_computed" from="NavigationAgent" to="." method="_on_safe_velocity_computed"]

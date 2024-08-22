@@ -10,12 +10,14 @@ script = ExtResource("1_wbvaj")
 rally_points = [NodePath("BuildTrenchRallyPoint"), NodePath("BuildTrenchRallyPoint2")]
 
 [node name="BuildTrenchRallyPoint" type="Area2D" parent="."]
+collision_layer = 0
 script = ExtResource("2_sbt2g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BuildTrenchRallyPoint"]
 shape = SubResource("CircleShape2D_yl662")
 
 [node name="BuildTrenchRallyPoint2" type="Area2D" parent="."]
+collision_layer = 0
 script = ExtResource("2_sbt2g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BuildTrenchRallyPoint2"]

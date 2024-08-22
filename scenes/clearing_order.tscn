@@ -10,6 +10,7 @@ script = ExtResource("1_j6fba")
 rally_points = [NodePath("ClearingOrderRallyPoint")]
 
 [node name="ClearingOrderRallyPoint" type="Area2D" parent="."]
+collision_layer = 0
 script = ExtResource("1_mjfyl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClearingOrderRallyPoint"]

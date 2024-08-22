@@ -8,11 +8,13 @@ const show_debug_path = true
 # Unit Stats
 @export var speed = 40
 @export var build_speed = 1
-@export var reload_time = 1 # Time to reload in seconds
+@export var reload_time = 1.0 # Time to reload in seconds
 
 # References to child objects
 @onready var nav_agent = $"./NavigationAgent"
 @onready var selection_marker = $"./SelectionMarker"
+@onready var raycast = $"./RayCast2D"
+@onready var collider = $"./CollisionShape"
 var debug_path_line:Line2D
 
 # Unit State
@@ -20,7 +22,7 @@ enum Behavior {IDLE, RALLYING, EXECUTING, FIGHTING}
 var current_behavior = Behavior.IDLE
 @export var current_rally_point:RallyPoint = null
 var current_path = []
-var reload_state = 0
+var reload_state = 0.0
 
 @export var side:PlayerManager.Side
 
@@ -52,8 +54,9 @@ func _physics_process(delta):
 			if reload_state > 0:
 				reload_state -= delta
 			else:
-				reload_state = reload_time
-				print("fire!")
+				var enemies_in_los = get_enemies_in_line_of_sight()
+				if enemies_in_los.size() != 0:
+					reload_state = reload_time
 	match(current_behavior):
 		Behavior.RALLYING:
 			var next_waypoint: Vector2 = nav_agent.get_next_path_position()
@@ -132,3 +135,19 @@ func set_rally_point(new_rally_point=null):
 		_set_behavior(Behavior.RALLYING)
 	else:
 		print("Soldier could not be assigned to rally point, either it is already assigned, or the rally point is at its capacity for assigned soldiers")
+
+func get_enemies_in_line_of_sight():
+	var hex_position = InputManager.building_grid.local_to_map(position)
+	var hexes_in_line_of_sight = InputManager.building_grid.get_trench_hexes_in_line_of_sight(InputManager.building_grid, hex_position)
+	var soldiers = []
+	for hex in hexes_in_line_of_sight:
+		for given_side in PlayerManager.Side.values():
+			if given_side != side:
+				for other_soldier in InputManager.building_grid.soldier_map.trench_occupation[given_side][hex]:
+					raycast.enabled = true
+					raycast.target_position = to_local(other_soldier.position)
+					raycast.force_raycast_update()
+					raycast.enabled = false
+					if raycast.get_collider() == other_soldier:
+						soldiers.append(other_soldier)
+	return soldiers
