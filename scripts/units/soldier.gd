@@ -57,6 +57,7 @@ func _physics_process(delta):
 				var enemies_in_los = get_enemies_in_line_of_sight()
 				if enemies_in_los.size() != 0:
 					reload_state = reload_time
+					enemies_in_los[0]._remove_soldier()
 	match(current_behavior):
 		Behavior.RALLYING:
 			var next_waypoint: Vector2 = nav_agent.get_next_path_position()
@@ -80,6 +81,7 @@ func _on_safe_velocity_computed(safe_velocity:Vector2):
 func _remove_soldier():
 	set_rally_point(null)
 	soldier_left_hex.emit(self, InputManager.building_grid.local_to_map(position))
+	queue_free()
 
 func _set_behavior(new_behavior):
 	match(new_behavior):

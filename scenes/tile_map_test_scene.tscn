@@ -1172,12 +1172,14 @@ planning_grid = NodePath("../PlanningGrid")
 
 [node name="ConstructionGrid" type="TileMapLayer" parent="Map"]
 modulate = Color(0.498039, 0.498039, 0, 1)
+z_index = -1
 tile_set = SubResource("TileSet_f86ca")
 collision_enabled = false
 navigation_enabled = false
 
 [node name="PlanningGrid" type="TileMapLayer" parent="Map"]
 modulate = Color(0, 1, 0, 1)
+z_index = 1
 tile_set = SubResource("TileSet_f86ca")
 collision_enabled = false
 navigation_enabled = false
